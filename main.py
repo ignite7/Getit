@@ -35,7 +35,7 @@ class MainClass(tk.Tk):
         self._canvas.config(scrollregion = self._canvas.bbox('all'))
         self._canvas.pack(side = 'left', fill = 'both', expand = True)
 
-def Main():
+def main_funtion():
     """ Funtion that handle the engine of 
     the program
     """
@@ -45,4 +45,4 @@ def Main():
     root.mainloop()
 
 if __name__ == '__main__':
-    Main() # Zero Init
+    main_funtion() # Zero Init
