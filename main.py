@@ -9,7 +9,7 @@ from PIL import Image, ImageTk
 # Sys info
 import platform
 import sys
-
+import time
 
 # Modules
 from menu import MenuClass
@@ -50,7 +50,26 @@ class MainClass(tk.Tk):
         # Contants variables inserts
         _URL = tk.StringVar()
         _TYPES = tk.StringVar()
-        _START = tk.IntVar()
+        
+        if sys.platform.startswith('linux'): # Check current OS
+            _PATH_DIR = '~/'
+        
+        else:
+            _PATH_DIR = 'C:\\Downloads'
+        
+        
+        # Errors messages
+        def _error_01():
+            """ Private funtion manager of show the error
+            number 01.
+            """
+            
+            error_01_text = 'Please complete all the holders and select all the options!' # Text
+                
+            error_01_label = tk.Label(self._frame, text = error_01_text, font = _LYRICS[1], fg = 'red', wraplength = 400)
+            error_01_label.grid(row = 6, columnspan = 2, sticky = 'we', pady = 10)             
+
+            error_01_label.after(2000, error_01_label.destroy) # Destroy error after 2 seconds
         
           
         # Image
@@ -102,33 +121,48 @@ class MainClass(tk.Tk):
         
         
         def _open_dir():
-            """ Funtion manager of establish the path of the dir
+            """ Private funtion manager of establish the path of the dir
             where save the files downloads.
             """
             
+            # Check the current OS
+            global _PATH_DIR
+            
             if sys.platform.startswith('linux'):
-                file_dialog = filedialog.askdirectory(
+                _PATH_DIR = filedialog.askdirectory(
                     parent = self._frame, 
                     title = 'Choose The Directory', 
                     initialdir = '~/'
                 )
 
             else: 
-                file_dialog = filedialog.askdirectory(
+                _PATH_DIR = filedialog.askdirectory(
                     parent = self._frame, 
                     title = 'Choose The Directory', 
                     initialdir = 'C:\\Downloads'
                 )
         
+        
         # Start button
-        _START.set('Start!') # Button text 
-        button = tk.Button(self._frame, textvariable = _START, cursor = 'hand2', command = lambda:_download())
+        button = tk.Button(self._frame, text = 'Start!', cursor = 'hand2', command = lambda:_download())
         button.config(relief = 'groove', borderwidth = 2, font = _LYRICS[1])
         button.grid(row = 5, columnspan = 2, sticky = 'we', pady = 10)
         
         
         def _download():
-            DownloadClass(self._root, self._frame, _LYRICS) # Module 'download.py'
+            """ Private funtion manager of initialize the module called
+            'download.py'.
+            """
+            
+            # Check everything is completed
+            global _PATH_DIR
+            
+            if _URL.get() == '' or _TYPES.get() == '':
+                _error_01() # Call error funtion
+                    
+            else:
+                DownloadClass(self._root, self._frame, _URL, _TYPES, _PATH_DIR, _LYRICS) # Module 'download.py' 
+        
         
         # Update and grid of the window
         self._root.update()
@@ -139,13 +173,10 @@ class MainClass(tk.Tk):
         
         # Calls class
         MenuClass(self._root) # Module 'menu.py'
-        
-        # Help objects
-        #print(dir(introduce))
 
         
 def _main_funtion():
-    """ Funtion that handle the engine of 
+    """ Private funtion that handle the engine of 
     the program
     """
     
