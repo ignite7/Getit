@@ -8,24 +8,38 @@ from PIL import Image, ImageTk
 
 # Pytube library
 import pytube
-
+import urllib.request
 
 class DownloadClass(tk.Tk):
     """ Class download manager """
     
-    def __init__(self, Root, Frame, Url, Types, Path, Lyrics):
+    def __init__(self, Root, Canvas, Frame, Url, Types, Rename, Path, Lyrics):
         """ Main initial method of download """
         
         # Assignament variables
         self._root = Root
+        self._canvas = Canvas
         self._frame = Frame
         
         
         # Constants variables
         _URL = Url
         _TYPES = Types 
+        _RENAME = Rename
         _PATH_DIR = Path
         _LYRICS = Lyrics
+        
+        
+        # Update window
+        def _update_window():
+            """ Private funtion managet to update the window 
+            of the program.
+            """
+            
+            self._root.update()  
+            self._canvas.config(scrollregion = self._canvas.bbox('all'))
+            self._canvas.pack()
+            self._frame.pack()
         
         
         # Constants funtions
@@ -36,7 +50,9 @@ class DownloadClass(tk.Tk):
             
             self.bar = ttk.Progressbar(self._frame, orient = 'horizontal', length = 100, mode = 'determinate', value = 85)
             self.bar.config(takefocus = True)
-            self.bar.grid(row = 6, columnspan = 2, sticky = 'we', pady = 10)
+            self.bar.grid(row = 9, columnspan = 2, sticky = 'we', pady = 10)
+            
+            _update_window()
             
             return self.bar
             
@@ -49,9 +65,9 @@ class DownloadClass(tk.Tk):
             _thank_you = f'The download has finished, you can find it in: \n\n{_PATH_DIR} \n\nHave a nice day!' # Thanks
             
             self.loaded = tk.Label(self._frame, text = _thank_you, font = _LYRICS[1], fg = 'red', wraplength = 500)
-            self.loaded.grid(row = 7, columnspan = 2, sticky = 'we')
+            self.loaded.grid(row = 10, columnspan = 2, sticky = 'we')
 
-            self._root.update() # Update the window
+            _update_window()
             
             return self.loaded
 
@@ -63,6 +79,7 @@ class DownloadClass(tk.Tk):
             
             _URL.set('')
             _TYPES.set('Types')
+            _RENAME.set('')
             _PATH_DIR = None
             
             
@@ -73,9 +90,37 @@ class DownloadClass(tk.Tk):
             
         # URL download 
         if _TYPES.get() == 'URL':
-            pass
-        
-        
+            if _PATH_DIR:
+                # Reassignament variables and starts progress bar
+                _progress_bar(self)
+                rename = _RENAME.get()
+                url = _URL.get()
+
+                        
+                # Request and content of the file
+                response = urllib.request.urlopen(url)
+                content = response.read()
+                
+                
+                # Save the file and check the url type
+                if rename.endswith('.html') or rename.endswith('.pdf'):
+                    with open(f'{_PATH_DIR}/{rename}', 'wb') as downloaded:
+                        downloaded.write(content)
+
+                else:
+                    if url.endswith('html'):
+                        with open(f'{_PATH_DIR}/net.html', 'wb') as downloaded:
+                            downloaded.write(content)
+                    
+                    elif url.endswith('pdf'):
+                        with open(f'{_PATH_DIR}/net.pdf', 'wb') as downloaded:
+                            downloaded.write(content)
+                    
+                        
+                # Show the resume
+                _downloaded(self)
+                _clear_all(self)
+            
         # YouTube download
         elif _TYPES.get() == 'Youtube':
             if _PATH_DIR:
@@ -126,4 +171,4 @@ class DownloadClass(tk.Tk):
         
         
         # Update the window    
-        self._root.update()        
+        _update_window()  

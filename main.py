@@ -10,6 +10,7 @@ from PIL import Image, ImageTk
 import platform
 import sys
 
+
 # Modules
 from menu import MenuClass
 from download import DownloadClass
@@ -26,7 +27,8 @@ class MainClass(tk.Tk):
         # Assigment variables
         self._root = Root
         self._root.title('Getit')
-        self._root.geometry('600x500')
+        self._root.geometry('600x600')
+        self._root.resizable(False, False)
          
         self._scroll = tk.Scrollbar(self._root)
         self._canvas = tk.Canvas(self._root, yscrollcommand = self._scroll.set)
@@ -49,6 +51,7 @@ class MainClass(tk.Tk):
         # Contants variables inserts
         _URL = tk.StringVar()
         _TYPES = tk.StringVar()
+        _RENAME = tk.StringVar()
         
         if sys.platform.startswith('linux'): # Check current OS
             self._PATH_DIR = '~/'
@@ -56,7 +59,32 @@ class MainClass(tk.Tk):
         else:
             self._PATH_DIR = 'C:\\Downloads'
         
-        
+           
+        # Update window
+        def _update_window():
+            """ Private funtion managet to update the window 
+            of the program.
+            """
+            
+            self._root.update()  
+            self._canvas.config(scrollregion = self._canvas.bbox('all'))
+            self._canvas.pack()
+            self._frame.pack()
+            
+            
+        # Show the holder rename when is called
+        def _rename():
+            """ Private funtion that show the holder rename if
+            the selection is 'URL' or 'Torrent'.
+            """
+            
+            self.rename_label = tk.Label(self._frame, text = 'Rename the file:', font = _LYRICS[1])
+            self.rename_label.grid(row = 5, column = 0, sticky = 'e', padx = 5)
+            
+            self.rename = tk.Entry(self._frame, textvariable = _RENAME, font = _LYRICS[1])
+            self.rename.grid(row = 5, column = 1, sticky = 'we', pady = 5)
+
+            
         # Errors messages
         def _error_01():
             """ Private funtion manager of show the error
@@ -66,11 +94,12 @@ class MainClass(tk.Tk):
             error_01_text = 'Please complete all the holders and select all the options!' # Text
                 
             error_01_label = tk.Label(self._frame, text = error_01_text, font = _LYRICS[1], fg = 'red', wraplength = 400)
-            error_01_label.grid(row = 6, columnspan = 2, sticky = 'we', pady = 10)             
+            error_01_label.grid(row = 8, columnspan = 2, sticky = 'we', pady = 10)             
 
             error_01_label.after(5000, error_01_label.destroy) # Destroy error after 5 seconds
         
         
+        # Short part of code of the logo
         def _logo_complement():
             """ Private funtion manager to complement the 
             logo image.
@@ -116,62 +145,101 @@ class MainClass(tk.Tk):
         sort.grid(row = 3, column = 1, sticky = 'we', pady = 5)
         
         
-        # Save the path
-        save_label = tk.Label(self._frame, text = 'Where do you want save it?', font = _LYRICS[1])
-        save_label.grid(row = 4, column = 0, sticky = 'e', padx = 5)
-    
-        save = tk.Button(self._frame, text = 'Open', cursor = 'hand2', command = lambda:_open_dir(self))
-        save.config(relief = 'groove', borderwidth = 2, font = _LYRICS[1])
-        save.grid(row = 4, column = 1, sticky = 'we', pady = 5)
+        # Button that allow continue to the another holders
+        go_head = tk.Button(self._frame, text = 'Continue', cursor = 'hand2', command = lambda:_continue())
+        go_head.config(relief = 'groove', borderwidth = 2, font = _LYRICS[1])
+        go_head.grid(row = 4, columnspan = 2, sticky = 'we', pady = 5)
         
         
-        def _open_dir(self):
-            """ Private funtion manager of establish the path of the dir
-            where save the files downloads.
+        def _continue():
+            """ Private funtion that allow the verification and
+            continue of the program (IMPORTANT).
             """
             
-            # Check the current OS
-            if sys.platform.startswith('linux'):
-                self._PATH_DIR = filedialog.askdirectory(
-                    parent = self._frame, 
-                    title = 'Choose The Directory', 
-                    initialdir = '~/'
-                )
-
-            else: 
-                self._PATH_DIR = filedialog.askdirectory(
-                    parent = self._frame, 
-                    title = 'Choose The Directory', 
-                    initialdir = 'C:\\Downloads'
-                )
-                
-            return self._PATH_DIR # Send the path to the private funtion '_download(self)'
-        
-        
-        # Start button
-        button = tk.Button(self._frame, text = 'Start!', cursor = 'hand2', command = lambda:_download(self))
-        button.config(relief = 'groove', borderwidth = 2, font = _LYRICS[1])
-        button.grid(row = 5, columnspan = 2, sticky = 'we', pady = 10)
-        
-        
-        def _download(self):
-            """ Private funtion manager of initialize the module called
-            'download.py'.
-            """
+            if _URL.get() == '' or _TYPES.get() == 'Types':
+                    _error_01() # Call error funtion
             
-            # Check everything is completed
-            if _URL.get() == '' or _TYPES.get() == '' or self._PATH_DIR == None:
-                _error_01() # Call error funtion
-                    
             else:
-                DownloadClass(self._root, self._frame, _URL, _TYPES, self._PATH_DIR, _LYRICS) # Module 'download.py' 
+                go_head.destroy() # Destroy button 'Continue'
+
+
+                # Check the type
+                if _TYPES.get() == 'URL' or _TYPES.get() == 'Torrent':
+                    _rename()
+
+            
+                # Save the path
+                save_label = tk.Label(self._frame, text = 'Where do you want save it?', font = _LYRICS[1])
+                save_label.grid(row = 6, column = 0, sticky = 'e', padx = 5)
+    
+                save = tk.Button(self._frame, text = 'Open', cursor = 'hand2', command = lambda:_open_dir(self))
+                save.config(relief = 'groove', borderwidth = 2, font = _LYRICS[1])
+                save.grid(row = 6, column = 1, sticky = 'we', pady = 5)
         
+        
+                def _open_dir(self):
+                    """ Private funtion manager of establish the path of the dir
+                    where save the files downloads.
+                    """
+            
+                    # Check the current OS
+                    if sys.platform.startswith('linux'):
+                        self._PATH_DIR = filedialog.askdirectory(
+                            parent = self._frame, 
+                            title = 'Choose The Directory', 
+                            initialdir = '~/'
+                        )
+
+                    else: 
+                        self._PATH_DIR = filedialog.askdirectory(
+                            parent = self._frame, 
+                            title = 'Choose The Directory', 
+                            initialdir = 'C:\\Downloads'
+                        )
+                
+                    return self._PATH_DIR # Send the path to the private funtion '_download(self)'
+        
+                
+                # Start button
+                start = tk.Button(self._frame, text = 'Start!', cursor = 'hand2', command = lambda:_download(self))
+                start.config(relief = 'groove', borderwidth = 2, font = _LYRICS[1])
+                start.grid(row = 7, columnspan = 2, sticky = 'we', pady = 10)
+        
+        
+                def _download(self):
+                    """ Private funtion manager of initialize the module called
+                    'download.py'.
+                    """
+
+                    # Check the path is on and call the module 'download.py'
+                    if self._PATH_DIR == None:
+                        _error_01()
+                    
+                    else:
+                        DownloadClass(self._root, self._canvas, self._frame, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS)  
+                        
+                
+                # Button that allow update the type 
+                go_back = tk.Button(self._frame, text = 'Update Type', cursor = 'hand2', command = lambda:_update_type(self))
+                go_back.config(relief = 'groove', borderwidth = 2, font = _LYRICS[1], fg = 'red')
+                go_back.grid(row = 8, columnspan = 2, sticky = 'we', pady = 10)
+                
+                
+                def _update_type(self):
+                    """ Private funtion that checks the type chosen and 
+                    update the window with the new type chosen.
+                    """
+                    
+                    if _TYPES.get() == 'URL' or _TYPES.get() == 'Torrent':
+                        _rename()
+                        
+                    elif _TYPES.get() == 'Youtube' or _TYPES.get() == 'YT Playlist':
+                        self.rename_label.destroy()
+                        self.rename.destroy()
+                        
         
         # Update and grid of the window
-        self._root.update()
-        self._canvas.config(scrollregion = self._canvas.bbox('all'))
-        self._canvas.pack()
-        self._frame.pack()
+        _update_window()
         
         
         # Calls class
