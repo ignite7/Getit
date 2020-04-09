@@ -108,10 +108,14 @@ class DownloadClass(tk.Tk):
                         downloaded.write(content)
 
                 else:
-                    if url.endswith('html'):
+                    if url.endswith(''):
                         with open(f'{_PATH_DIR}/net.html', 'wb') as downloaded:
                             downloaded.write(content)
-                    
+                            
+                    elif url.endswith('html'):
+                        with open(f'{_PATH_DIR}/net.html', 'wb') as downloaded:
+                            downloaded.write(content)
+                           
                     elif url.endswith('pdf'):
                         with open(f'{_PATH_DIR}/net.pdf', 'wb') as downloaded:
                             downloaded.write(content)
