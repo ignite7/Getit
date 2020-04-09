@@ -29,33 +29,34 @@ class DownloadClass(tk.Tk):
         
         
         # Constants funtions
-        def _progress_bar():
+        def _progress_bar(self):
             """ Private funtion manager of show the progress
             bar when the download starts.
             """
             
-            bar = ttk.Progressbar(self._frame, orient = 'horizontal', length = 100, mode = 'determinate', value = 85)
-            bar.config(takefocus = True)
-            bar.grid(row = 6, columnspan = 2, sticky = 'we', pady = 10)
+            self.bar = ttk.Progressbar(self._frame, orient = 'horizontal', length = 100, mode = 'determinate', value = 85)
+            self.bar.config(takefocus = True)
+            self.bar.grid(row = 6, columnspan = 2, sticky = 'we', pady = 10)
             
-            bar.after(5000, bar.destroy) # Destory the bar after finish
+            return self.bar
             
             
-        def _downloaded():
+        def _downloaded(self):
             """ Private funtion manager of show the path of the
             downloaded files.
             """
             
             _thank_you = f'The download has finished, you can find it in: \n\n{_PATH_DIR} \n\nHave a nice day!' # Thanks
             
-            loaded = tk.Label(self._frame, text = _thank_you, font = _LYRICS[1], fg = 'red', wraplength = 500)
-            loaded.grid(row = 7, columnspan = 2, sticky = 'we')
-            
-            loaded.after(5000, loaded.destroy) # Destory the bar after finish
+            self.loaded = tk.Label(self._frame, text = _thank_you, font = _LYRICS[1], fg = 'red', wraplength = 500)
+            self.loaded.grid(row = 7, columnspan = 2, sticky = 'we')
+
             self._root.update() # Update the window
+            
+            return self.loaded
 
         
-        def _clear_all():
+        def _clear_all(self):
             """ Private funtion manager of clean the window with 
             the default values.
             """
@@ -63,6 +64,12 @@ class DownloadClass(tk.Tk):
             _URL.set('')
             _TYPES.set('Types')
             _PATH_DIR = None
+            
+            
+            # Destory the progress and the message thanks after 10 seconds
+            self.bar.after(10000, self.bar.destroy)
+            self.loaded.after(10000, self.loaded.destroy)
+            
             
         # URL download 
         if _TYPES.get() == 'URL':
@@ -73,7 +80,7 @@ class DownloadClass(tk.Tk):
         elif _TYPES.get() == 'Youtube':
             if _PATH_DIR:
                 # Starts the progress bar and update the window
-                _progress_bar() 
+                _progress_bar(self) 
                 self._root.update()
                 
                 
@@ -87,29 +94,30 @@ class DownloadClass(tk.Tk):
                 
                 
                 # Show the path, clear all and thanks
-                _downloaded()
-                _clear_all()
+                _downloaded(self)
+                _clear_all(self)
                 
                 
         # YT Playlist download
         elif _TYPES.get() == 'YT Playlist':
-            # Starts the progress bar and update the window
-            _progress_bar()
-            self._root.update()
+            if _PATH_DIR:
+                # Starts the progress bar and update the window
+                _progress_bar(self)
+                self._root.update()
             
             
-            # Starts YT Playlist download and save it
-            try:
-                yt_playlist = pytube.Playlist(_URL.get())
-                yt_playlist.download_all(_PATH_DIR)
+                # Starts YT Playlist download and save it
+                try:
+                    yt_playlist = pytube.Playlist(_URL.get())
+                    yt_playlist.download_all(_PATH_DIR)
             
-            except DeprecationWarning:
-                pass # Do nothing with warning
+                except DeprecationWarning:
+                    pass # Do nothing with warning
             
             
-            # Show the path, clear all and thanks
-            _downloaded()
-            _clear_all()
+                # Show the path, clear all and thanks
+                _downloaded(self)
+                _clear_all(self)
          
                              
         # Torrent download

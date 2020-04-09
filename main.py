@@ -9,7 +9,6 @@ from PIL import Image, ImageTk
 # Sys info
 import platform
 import sys
-import time
 
 # Modules
 from menu import MenuClass
@@ -52,10 +51,10 @@ class MainClass(tk.Tk):
         _TYPES = tk.StringVar()
         
         if sys.platform.startswith('linux'): # Check current OS
-            _PATH_DIR = '~/'
+            self._PATH_DIR = '~/'
         
         else:
-            _PATH_DIR = 'C:\\Downloads'
+            self._PATH_DIR = 'C:\\Downloads'
         
         
         # Errors messages
@@ -69,21 +68,27 @@ class MainClass(tk.Tk):
             error_01_label = tk.Label(self._frame, text = error_01_text, font = _LYRICS[1], fg = 'red', wraplength = 400)
             error_01_label.grid(row = 6, columnspan = 2, sticky = 'we', pady = 10)             
 
-            error_01_label.after(2000, error_01_label.destroy) # Destroy error after 2 seconds
+            error_01_label.after(5000, error_01_label.destroy) # Destroy error after 5 seconds
         
-          
+        
+        def _logo_complement():
+            """ Private funtion manager to complement the 
+            logo image.
+            """
+            
+            logo_label = tk.Label(self._frame, image = logo, cursor = 'hand2')
+            logo_label.image = logo # Reference
+            logo_label.grid(row = 0, columnspan = 2, column = 0, sticky = 'nswe', pady = 20)
+        
+        
         # Image
         if sys.platform.startswith('linux'):
             logo = ImageTk.PhotoImage(Image.open('./img/logo.png'))
-            logo_label = tk.Label(self._frame, image = logo, cursor = 'hand2')
-            logo_label.image = logo # Reference
-            logo_label.grid(row = 0, columnspan = 2, column = 0, sticky = 'nswe', pady = 20)
+            _logo_complement()
             
         else:
             logo = ImageTk.PhotoImage(Image.open('.\\img\\logo.png'))
-            logo_label = tk.Label(self._frame, image = logo, cursor = 'hand2')
-            logo_label.image = logo # Reference
-            logo_label.grid(row = 0, columnspan = 2, column = 0, sticky = 'nswe', pady = 20)
+            _logo_complement()
         
                 
         # Introduce cell   
@@ -115,59 +120,57 @@ class MainClass(tk.Tk):
         save_label = tk.Label(self._frame, text = 'Where do you want save it?', font = _LYRICS[1])
         save_label.grid(row = 4, column = 0, sticky = 'e', padx = 5)
     
-        save = tk.Button(self._frame, text = 'Open', cursor = 'hand2', command = lambda:_open_dir())
+        save = tk.Button(self._frame, text = 'Open', cursor = 'hand2', command = lambda:_open_dir(self))
         save.config(relief = 'groove', borderwidth = 2, font = _LYRICS[1])
         save.grid(row = 4, column = 1, sticky = 'we', pady = 5)
         
         
-        def _open_dir():
+        def _open_dir(self):
             """ Private funtion manager of establish the path of the dir
             where save the files downloads.
             """
             
             # Check the current OS
-            global _PATH_DIR
-            
             if sys.platform.startswith('linux'):
-                _PATH_DIR = filedialog.askdirectory(
+                self._PATH_DIR = filedialog.askdirectory(
                     parent = self._frame, 
                     title = 'Choose The Directory', 
                     initialdir = '~/'
                 )
 
             else: 
-                _PATH_DIR = filedialog.askdirectory(
+                self._PATH_DIR = filedialog.askdirectory(
                     parent = self._frame, 
                     title = 'Choose The Directory', 
                     initialdir = 'C:\\Downloads'
                 )
+                
+            return self._PATH_DIR # Send the path to the private funtion '_download(self)'
         
         
         # Start button
-        button = tk.Button(self._frame, text = 'Start!', cursor = 'hand2', command = lambda:_download())
+        button = tk.Button(self._frame, text = 'Start!', cursor = 'hand2', command = lambda:_download(self))
         button.config(relief = 'groove', borderwidth = 2, font = _LYRICS[1])
         button.grid(row = 5, columnspan = 2, sticky = 'we', pady = 10)
         
         
-        def _download():
+        def _download(self):
             """ Private funtion manager of initialize the module called
             'download.py'.
             """
             
             # Check everything is completed
-            global _PATH_DIR
-            
-            if _URL.get() == '' or _TYPES.get() == '':
+            if _URL.get() == '' or _TYPES.get() == '' or self._PATH_DIR == None:
                 _error_01() # Call error funtion
                     
             else:
-                DownloadClass(self._root, self._frame, _URL, _TYPES, _PATH_DIR, _LYRICS) # Module 'download.py' 
+                DownloadClass(self._root, self._frame, _URL, _TYPES, self._PATH_DIR, _LYRICS) # Module 'download.py' 
         
         
         # Update and grid of the window
         self._root.update()
         self._canvas.config(scrollregion = self._canvas.bbox('all'))
-        self._canvas.pack() # (side = 'left', fill = 'both', expand = True)
+        self._canvas.pack()
         self._frame.pack()
         
         
