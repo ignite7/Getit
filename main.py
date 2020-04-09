@@ -104,7 +104,7 @@ class MainClass(tk.Tk):
         sort_label.grid(row = 3, column = 0, sticky = 'e', padx = 5)
         
         _TYPES.set('Types')
-        list_of_types = ['URL', 'Youtube', 'Torrent']
+        list_of_types = ['URL', 'Youtube', 'YT Playlist', 'Torrent'] # List of types
         
         sort = tk.OptionMenu(self._frame, _TYPES, *list_of_types)
         sort.config(font = _LYRICS[1], relief = 'groove', borderwidth = 2)

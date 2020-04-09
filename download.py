@@ -38,6 +38,8 @@ class DownloadClass(tk.Tk):
             bar.config(takefocus = True)
             bar.grid(row = 6, columnspan = 2, sticky = 'we', pady = 10)
             
+            bar.after(5000, bar.destroy) # Destory the bar after finish
+            
             
         def _downloaded():
             """ Private funtion manager of show the path of the
@@ -49,8 +51,19 @@ class DownloadClass(tk.Tk):
             loaded = tk.Label(self._frame, text = _thank_you, font = _LYRICS[1], fg = 'red', wraplength = 500)
             loaded.grid(row = 7, columnspan = 2, sticky = 'we')
             
+            loaded.after(5000, loaded.destroy) # Destory the bar after finish
             self._root.update() # Update the window
+
         
+        def _clear_all():
+            """ Private funtion manager of clean the window with 
+            the default values.
+            """
+            
+            _URL.set('')
+            _TYPES.set('Types')
+            _PATH_DIR = None
+            
         # URL download 
         if _TYPES.get() == 'URL':
             pass
@@ -65,14 +78,40 @@ class DownloadClass(tk.Tk):
                 
                 
                 # Starts youtube download and save it 
-                yt_video = pytube.YouTube(_URL.get())                
-                yt_dir = yt_video.streams.first().download(_PATH_DIR)
+                try:
+                    yt_video = pytube.YouTube(_URL.get())                
+                    yt_video.streams.first().download(_PATH_DIR)
+                
+                except DeprecationWarning:
+                    pass # Do nothing with warning
                 
                 
-                # Show the path and thank you
+                # Show the path, clear all and thanks
                 _downloaded()
+                _clear_all()
                 
-                    
+                
+        # YT Playlist download
+        elif _TYPES.get() == 'YT Playlist':
+            # Starts the progress bar and update the window
+            _progress_bar()
+            self._root.update()
+            
+            
+            # Starts YT Playlist download and save it
+            try:
+                yt_playlist = pytube.Playlist(_URL.get())
+                yt_playlist.download_all(_PATH_DIR)
+            
+            except DeprecationWarning:
+                pass # Do nothing with warning
+            
+            
+            # Show the path, clear all and thanks
+            _downloaded()
+            _clear_all()
+         
+                             
         # Torrent download
         elif _TYPES.get() == 'Torrent':
             pass
