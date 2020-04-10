@@ -29,7 +29,9 @@ class MainClass(tk.Tk):
         self._root.title('Getit')
         self._root.geometry('600x600')
         self._root.resizable(False, False)
-         
+        
+        
+        # Canvas, frame and scroll bar 
         self._scroll = tk.Scrollbar(self._root)
         self._canvas = tk.Canvas(self._root, yscrollcommand = self._scroll.set)
 
@@ -78,7 +80,7 @@ class MainClass(tk.Tk):
             the selection is 'URL' or 'Torrent'.
             """
             
-            self.rename_label = tk.Label(self._frame, text = 'Rename the file:', font = _LYRICS[1])
+            self.rename_label = tk.Label(self._frame, text = 'Rename the file:', font = _LYRICS[1], fg = 'red')
             self.rename_label.grid(row = 5, column = 0, sticky = 'e', padx = 5)
             
             self.rename = tk.Entry(self._frame, textvariable = _RENAME, font = _LYRICS[1])
@@ -243,7 +245,7 @@ class MainClass(tk.Tk):
         
         
         # Calls class
-        MenuClass(self._root) # Module 'menu.py'
+        MenuClass(self._root, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS) # Module 'menu.py'
 
         
 def _main_funtion():

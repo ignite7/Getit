@@ -6,9 +6,10 @@ from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
 
 
-# Pytube library
-import pytube
-import urllib.request
+# Important libraries
+import pytube # Youtube
+import urllib.request # Url download
+
 
 class DownloadClass(tk.Tk):
     """ Class download manager """
@@ -87,43 +88,43 @@ class DownloadClass(tk.Tk):
             self.bar.after(10000, self.bar.destroy)
             self.loaded.after(10000, self.loaded.destroy)
             
+        
+        def _url_downloads():
+            """ Private funtion manager of downloads the types
+            'URL' and 'Torrent' from the options.
+            """
             
-        # URL download 
-        if _TYPES.get() == 'URL':
             if _PATH_DIR:
                 # Reassignament variables and starts progress bar
                 _progress_bar(self)
                 rename = _RENAME.get()
                 url = _URL.get()
 
-                        
+                
                 # Request and content of the file
                 response = urllib.request.urlopen(url)
                 content = response.read()
                 
                 
                 # Save the file and check the url type
-                if rename.endswith('.html') or rename.endswith('.pdf'):
+                if rename != '': 
                     with open(f'{_PATH_DIR}/{rename}', 'wb') as downloaded:
                         downloaded.write(content)
 
                 else:
-                    if url.endswith(''):
-                        with open(f'{_PATH_DIR}/net.html', 'wb') as downloaded:
-                            downloaded.write(content)
-                            
-                    elif url.endswith('html'):
-                        with open(f'{_PATH_DIR}/net.html', 'wb') as downloaded:
-                            downloaded.write(content)
-                           
-                    elif url.endswith('pdf'):
-                        with open(f'{_PATH_DIR}/net.pdf', 'wb') as downloaded:
-                            downloaded.write(content)
+                    with open(f'{_PATH_DIR}/download_getit', 'wb') as downloaded:
+                        downloaded.write(content)
                     
                         
                 # Show the resume
                 _downloaded(self)
                 _clear_all(self)
+            
+                
+        # URL download 
+        if _TYPES.get() == 'URL':
+            _url_downloads() # Call private funtion
+            
             
         # YouTube download
         elif _TYPES.get() == 'Youtube':
@@ -171,7 +172,7 @@ class DownloadClass(tk.Tk):
                              
         # Torrent download
         elif _TYPES.get() == 'Torrent':
-            pass
+            _url_downloads() # Call private funtion
         
         
         # Update the window    

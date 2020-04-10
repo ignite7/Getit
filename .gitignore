@@ -1,2 +1,6 @@
 # Ignore python cache
 __pycache__/*
+
+
+# Ignore krita files
+img/logo.png.kra
