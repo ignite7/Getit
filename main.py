@@ -107,7 +107,7 @@ class MainClass(tk.Tk):
             logo image.
             """
             
-            logo_label = tk.Label(self._frame, image = logo, cursor = 'hand2')
+            logo_label = tk.Label(self._frame, image = logo)
             logo_label.image = logo # Reference
             logo_label.grid(row = 0, columnspan = 2, column = 0, sticky = 'nswe', pady = 20)
         
