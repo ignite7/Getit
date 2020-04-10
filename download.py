@@ -10,6 +10,8 @@ from PIL import Image, ImageTk
 import pytube # Youtube
 import urllib.request # Url download
 
+import time
+
 
 class DownloadClass(tk.Tk):
     """ Class download manager """
@@ -49,15 +51,25 @@ class DownloadClass(tk.Tk):
             bar when the download starts.
             """
             
-            self.bar = ttk.Progressbar(self._frame, orient = 'horizontal', length = 100, mode = 'determinate', value = 85)
+            self.bar = ttk.Progressbar(self._frame, orient = 'horizontal', length = 100, mode = 'determinate')
             self.bar.config(takefocus = True)
             self.bar.grid(row = 9, columnspan = 2, sticky = 'we', pady = 10)
             
-            _update_window()
+            self.wait = tk.Label(self._frame, text = 'Wait...', font = _LYRICS[1], fg = 'red')
+            self.wait.grid(row = 10, columnspan = 2, sticky = 'we')
+            
+            _updating_progress_bar(self) # Update of the progress bar
             
             return self.bar
+        
+        
+        def _updating_progress_bar(self):
+            for updating in range(0, 81, 20):
+                self.bar['value'] = updating
+                _update_window()
+                time.sleep(1)
             
-            
+                
         def _downloaded(self):
             """ Private funtion manager of show the path of the
             downloaded files.
@@ -66,9 +78,21 @@ class DownloadClass(tk.Tk):
             _thank_you = f'The download has finished, you can find it in: \n\n{_PATH_DIR} \n\nHave a nice day!' # Thanks
             
             self.loaded = tk.Label(self._frame, text = _thank_you, font = _LYRICS[1], fg = 'red', wraplength = 500)
-            self.loaded.grid(row = 10, columnspan = 2, sticky = 'we')
-
-            _update_window()
+            self.loaded.grid(row = 11, columnspan = 2, sticky = 'we', pady = 10)
+            
+            
+            # Finish progress bar
+            self.bar['value'] = 100
+            time.sleep(2)
+            
+            
+            # Destory text 'Wait...' and label indicating that has been completed
+            self.wait.destroy()
+            
+            self.completed = tk.Label(self._frame, text = 'Completed!', font = _LYRICS[1], fg = 'red')
+            self.completed.grid(row = 10, columnspan = 2, sticky = 'we')
+            
+            _update_window() # Update window
             
             return self.loaded
 
@@ -84,9 +108,10 @@ class DownloadClass(tk.Tk):
             _PATH_DIR = None
             
             
-            # Destory the progress and the message thanks after 10 seconds
-            self.bar.after(10000, self.bar.destroy)
-            self.loaded.after(10000, self.loaded.destroy)
+            # Destory the progress, completed and the message thanks after 8 seconds
+            self.bar.after(8000, self.bar.destroy)
+            self.completed.after(8000, self.completed.destroy)
+            self.loaded.after(8000, self.loaded.destroy)
             
         
         def _url_downloads():
