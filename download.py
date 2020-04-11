@@ -9,8 +9,7 @@ from PIL import Image, ImageTk
 # Important libraries
 import pytube # Youtube
 import urllib.request # Url download
-
-import time
+import time # Take the time
 
 
 class DownloadClass(tk.Tk):
@@ -55,7 +54,7 @@ class DownloadClass(tk.Tk):
             self.bar.config(takefocus = True)
             self.bar.grid(row = 9, columnspan = 2, sticky = 'we', pady = 10)
             
-            self.wait = tk.Label(self._frame, text = 'Wait...', font = _LYRICS[1], fg = 'red')
+            self.wait = tk.Label(self._frame, text = 'Downloading...', font = _LYRICS[1], fg = 'red')
             self.wait.grid(row = 10, columnspan = 2, sticky = 'we')
             
             _updating_progress_bar(self) # Update of the progress bar
@@ -148,7 +147,8 @@ class DownloadClass(tk.Tk):
                 
         # URL download 
         if _TYPES.get() == 'URL':
-            _url_downloads() # Call private funtion
+            if _PATH_DIR:
+                _url_downloads() # Call private funtion
             
             
         # YouTube download
@@ -197,7 +197,8 @@ class DownloadClass(tk.Tk):
                              
         # Torrent download
         elif _TYPES.get() == 'Torrent':
-            _url_downloads() # Call private funtion
+            if _PATH_DIR:
+                _url_downloads() # Call private funtion
         
         
         # Update the window    
