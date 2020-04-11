@@ -71,7 +71,7 @@ class MainClass(tk.Tk):
            
         # Update window
         def _update_window(self):
-            """ Private funtion managet to update the window 
+            """ Private function managet to update the window 
             of the program.
             """
             
@@ -83,7 +83,7 @@ class MainClass(tk.Tk):
             
         # Show the field rename when is called
         def _rename():
-            """ Private funtion that show the field rename if
+            """ Private function that show the field rename if
             the selection is 'URL' or 'Torrent'.
             """
             
@@ -96,7 +96,7 @@ class MainClass(tk.Tk):
             
         # Errors messages
         def _error_01():
-            """ Private funtion manager of show the error
+            """ Private function manager of show the error
             number 01.
             """
             
@@ -110,7 +110,7 @@ class MainClass(tk.Tk):
         
         # Short part of code of the logo
         def _logo_complement():
-            """ Private funtion manager to complement the 
+            """ Private function manager to complement the 
             logo image.
             """
             
@@ -161,12 +161,12 @@ class MainClass(tk.Tk):
         
         
         def _continue():
-            """ Private funtion that allow the verification and
+            """ Private function that allow the verification and
             continue of the program (IMPORTANT).
             """
             
             if _URL.get() == '' or _TYPES.get() == 'Types':
-                    _error_01() # Call error funtion
+                    _error_01() # Call error function
             
             else:
                 go_head.destroy() # Destroy button 'Continue'
@@ -187,7 +187,7 @@ class MainClass(tk.Tk):
         
         
                 def _open_dir(self):
-                    """ Private funtion manager of establish the path of the dir
+                    """ Private function manager of establish the path of the dir
                     where save the files downloads.
                     """
             
@@ -206,7 +206,7 @@ class MainClass(tk.Tk):
                             initialdir = 'C:\\Downloads'
                         )
                 
-                    return self._PATH_DIR # Send the path to the private funtion '_download(self)'
+                    return self._PATH_DIR # Send the path to the private function '_download(self)'
         
                 
                 # Start button
@@ -216,7 +216,7 @@ class MainClass(tk.Tk):
         
         
                 def _download(self):
-                    """ Private funtion manager of initialize the module called
+                    """ Private function manager of initialize the module called
                     'download.py'.
                     """
                     
@@ -230,12 +230,12 @@ class MainClass(tk.Tk):
                 
                 
                 def _update_type(self):
-                    """ Private funtion that checks the type chosen and 
+                    """ Private function that checks the type chosen and 
                     update the window with the new type chosen.
                     """
                     
                     if _TYPES.get() == 'URL' or _TYPES.get() == 'Torrent':
-                        _rename() # Call private funtion 'rename'
+                        _rename() # Call private function 'rename'
                         
                     elif _TYPES.get() == 'Youtube' or _TYPES.get() == 'YT Playlist':
                         self.rename_label.destroy()
@@ -251,7 +251,7 @@ class MainClass(tk.Tk):
 
         
 def _getit():
-    """ Private funtion that handle the engine of 
+    """ Private function that handle the engine of 
     the program
     """
     

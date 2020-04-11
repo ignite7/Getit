@@ -39,7 +39,7 @@ class DownloadClass(tk.Tk):
         
         # Update window
         def _update_window(self):
-            """ Private funtion managet to update the window 
+            """ Private function managet to update the window 
             of the program.
             """
             
@@ -51,7 +51,7 @@ class DownloadClass(tk.Tk):
         
         # Errors messages
         def _any_error(self):
-            """ Private funtion exclusive from this module.
+            """ Private function exclusive from this module.
             Starts when the 'URL' can't be downloaded.
             """
             
@@ -66,9 +66,26 @@ class DownloadClass(tk.Tk):
             self.any_error.grid(row = 11, columnspan = 2, sticky = 'we', pady = 10)
             
         
-        # Constants funtions
+        # Decorators functions
+        def _decorator_clear_all(function):
+            """ Decorator funtion used for complement
+            the functions manager of clean the window.
+            """
+            
+            def wrapper(self):
+                _URL.set('')
+                _TYPES.set('Types')
+                _RENAME.set('')
+                _PATH_DIR = None
+                
+                function(self)
+                
+            return wrapper
+        
+        
+        # Constants functions
         def _progress_bar(self):
-            """ Private funtion manager of show the progress
+            """ Private function manager of show the progress
             bar when the download starts.
             """
             
@@ -85,7 +102,7 @@ class DownloadClass(tk.Tk):
         
         
         def _updating_progress_bar(self):
-            """ Private funtion manager of update the progress
+            """ Private function manager of update the progress
             bar.
             """
             
@@ -96,7 +113,7 @@ class DownloadClass(tk.Tk):
             
                 
         def _downloaded(self):
-            """ Private funtion manager of show the path of the
+            """ Private function manager of show the path of the
             downloaded files.
             """
             
@@ -122,35 +139,23 @@ class DownloadClass(tk.Tk):
             return self.loaded
 
         
+        @_decorator_clear_all
         def _clear_all_completed(self):
-            """ Private funtion manager of clean the window with 
+            """ Private function manager of clean the window with 
             the default values.
             """
             
-            _URL.set('')
-            _TYPES.set('Types')
-            _RENAME.set('')
-            _PATH_DIR = None
-            
-            
-            # Destory the progress, completed and the thanks message after 8 seconds
             self.bar.after(8000, self.bar.destroy)
             self.loaded.after(8000, self.loaded.destroy)
             self.completed.after(8000, self.completed.destroy)      
         
         
+        @_decorator_clear_all
         def _clear_all_uncompleted(self):
-            """ Private funtion manager of clean the window when
+            """ Private function manager of clean the window when
             the download has failed.
             """
-            
-            _URL.set('')
-            _TYPES.set('Types')
-            _RENAME.set('')
-            _PATH_DIR = None
-            
-            
-            # Destory the progress, completed and the error after 10 seconds
+
             self.bar.destroy()
             self.wait.destroy()
             self.any_error.after(10000, self.any_error.destroy)
@@ -158,7 +163,7 @@ class DownloadClass(tk.Tk):
         
         try:
             def _url_downloads():
-                """ Private funtion manager of downloads the types
+                """ Private function manager of downloads the types
                 'URL' and 'Torrent' from the options.
                 """
             
@@ -199,7 +204,7 @@ class DownloadClass(tk.Tk):
                 
             # URL download 
             if _TYPES.get() == 'URL':
-                _url_downloads() # Call private funtion
+                _url_downloads() # Call private function
             
             
             # YouTube download
@@ -246,10 +251,10 @@ class DownloadClass(tk.Tk):
                              
             # Torrent download
             elif _TYPES.get() == 'Torrent':
-                _url_downloads() # Call private funtion
+                _url_downloads() # Call private function
         
         except:
-            _any_error(self) # Call exclusive private funtion 
+            _any_error(self) # Call exclusive private function 
             _clear_all_uncompleted(self) # Clear everything
             
             

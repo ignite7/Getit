@@ -58,7 +58,7 @@ class MenuClass(tk.Tk):
         menu_options.add_command(label = 'Recovery URL')
         
         
-        # Menu funtions
+        # Menu functions
         def _help():
             HelpClass(self._root, _LYRICS)
             
@@ -106,9 +106,9 @@ class HelpClass(tk.Tk):
         self._canvas.create_window(0, 0, window = self._frame, anchor = 'nw')
         
         
-        # Constants funtions
+        # Constants functions
         def _update_window(self):
-            """ Private funtion managet to update the window 
+            """ Private function managet to update the window 
             of the program.
             """
             
@@ -120,7 +120,7 @@ class HelpClass(tk.Tk):
         
         # Short part of code of the logo
         def _manual_complement():
-            """ Private funtion manager to complement the 
+            """ Private function manager to complement the 
             manual image.
             """
             
