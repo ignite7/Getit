@@ -6,7 +6,8 @@ from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
 
 
-# Sys info
+# System info
+import getpass
 import platform
 import sys
 
@@ -59,12 +60,13 @@ class MainClass(tk.Tk):
         _URL = tk.StringVar()
         _TYPES = tk.StringVar()
         _RENAME = tk.StringVar()
+        _USER = getpass.getuser() # Get the user name
         
-        if sys.platform.startswith('lin') or sys.platform.startswith('Lin'): # Check current OS
-            self._PATH_DIR = '~/'
+        if sys.platform.startswith('linux'): # Check current OS
+            self._PATH_DIR = f'/home/{_USER}'
         
         else:
-            self._PATH_DIR = 'C:\\Downloads'
+            self._PATH_DIR = f'C:\\Users\\{_USER}\\Downloads'
         
            
         # Update window
@@ -248,15 +250,15 @@ class MainClass(tk.Tk):
         MenuClass(self._root, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS) # Module 'menu.py'
 
         
-def _main_funtion():
+def _getit():
     """ Private funtion that handle the engine of 
     the program
     """
     
     root = tk.Tk()
-    getit = MainClass(root)
+    MainClass(root)
     root.mainloop()
 
 
 if __name__ == '__main__':
-    _main_funtion() # Starts the execution
+    _getit() # Starts the execution

@@ -6,6 +6,11 @@ from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
 
 
+# System info
+import platform
+import sys
+
+
 # Important libraries
 import pytube # Youtube
 import urllib.request # Url download
@@ -51,12 +56,13 @@ class DownloadClass(tk.Tk):
             """
             
             _any_error_text = [
-                'Something was wrong! \n\n The URL doesn\'t accept downloads'
-                '\n\nConsult the provider of the URL.'
+                'Something was wrong! Check the manual.'
+                '\n\nThe URL doesn\'t accept downloads, consult the provider of the URL.'
+                '\n\nAlso you make sure the file to download has permissions to save on your computer.'
             ]
             
             self.any_error = tk.Label(self._frame, text = _any_error_text[0], font = _LYRICS[1])
-            self.any_error.config(fg = 'red', wraplength = 500)
+            self.any_error.config(fg = 'red', wraplength = 450)
             self.any_error.grid(row = 11, columnspan = 2, sticky = 'we', pady = 10)
             
         
@@ -144,10 +150,10 @@ class DownloadClass(tk.Tk):
             _PATH_DIR = None
             
             
-            # Destory the progress, completed and the error after 8 seconds
+            # Destory the progress, completed and the error after 10 seconds
             self.bar.destroy()
             self.wait.destroy()
-            self.any_error.after(8000, self.any_error.destroy)
+            self.any_error.after(10000, self.any_error.destroy)
         
         
         try:
@@ -168,15 +174,24 @@ class DownloadClass(tk.Tk):
                 
                 
                 # Save the file and check the url type
-                if rename != '': 
-                    with open(f'{_PATH_DIR}/{rename}', 'wb') as downloaded:
-                        downloaded.write(content)
+                if rename != '':
+                    if sys.platform.startswith('linux'):
+                        with open(f'{_PATH_DIR}/{rename}', 'wb') as downloaded:
+                            downloaded.write(content)
 
+                    else:
+                        with open(f'{_PATH_DIR}\\{rename}', 'wb') as downloaded:
+                            downloaded.write(content)
                 else:
-                    with open(f'{_PATH_DIR}/download_getit', 'wb') as downloaded:
-                        downloaded.write(content)
+                    if sys.platform.startswith('linux'):
+                        with open(f'{_PATH_DIR}/download_getit', 'wb') as downloaded:
+                            downloaded.write(content)
+
+                    else:
+                        with open(f'{_PATH_DIR}\\download_getit', 'wb') as downloaded:
+                            downloaded.write(content)
                     
-                        
+
                 # Show the resume
                 _downloaded(self)
                 _clear_all_completed(self)

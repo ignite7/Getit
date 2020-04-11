@@ -91,7 +91,7 @@ class HelpClass(tk.Tk):
         # Window
         self._main_window = tk.Toplevel(self._root)
         self._main_window.title('Manual')
-        self._main_window.geometry('600x600')
+        self._main_window.geometry('600x610')
         self._main_window.resizable(False, False)
         
         
@@ -146,7 +146,7 @@ class HelpClass(tk.Tk):
                 'but please read the instructions to you don\'t make mistakes.'
              ),
             (
-                '01 - You should make sure that the \'URL\' is the correct.'
+                '01 - You make sure that the \'URL\' is the correct and the file to download has permissions.'
                 '\n\n'
                 '02 - The only fields that\ aren\'t necessary fill out are \'RENAME\' field and \'OPEN FOLDER\' field.'
                 '\n\n'
@@ -154,7 +154,9 @@ class HelpClass(tk.Tk):
                 '\n\n'
                 '04 - You can update your choise selecting a new type and the click in the button \'UPDATE THE TYPE\'.'
                 '\n\n'
-                '05 - Remember to be patient with the download because depends of your internet conection.'
+                '05 - REMEMBER to be patient with the download because depends of your internet conection '
+                'and REMEMBER sometimes there are URL\'s that have firewalls or locks, '
+                'consult the provider of the URL if you have problems.'
                 '\n\n'
                 '06 - If you want more information you can contact me in www.sergiovanberkel.com.'
                 '\n\n'
