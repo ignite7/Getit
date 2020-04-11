@@ -33,7 +33,7 @@ class DownloadClass(tk.Tk):
         
         
         # Update window
-        def _update_window():
+        def _update_window(self):
             """ Private funtion managet to update the window 
             of the program.
             """
@@ -43,6 +43,22 @@ class DownloadClass(tk.Tk):
             self._canvas.pack()
             self._frame.pack()
         
+        
+        # Errors messages
+        def _any_error(self):
+            """ Private funtion exclusive from this module.
+            Starts when the 'URL' can't be downloaded.
+            """
+            
+            _any_error_text = [
+                'Something was wrong! \n\n The URL doesn\'t accept downloads'
+                '\n\nConsult the provider of the URL.'
+            ]
+            
+            self.any_error = tk.Label(self._frame, text = _any_error_text[0], font = _LYRICS[1])
+            self.any_error.config(fg = 'red', wraplength = 500)
+            self.any_error.grid(row = 11, columnspan = 2, sticky = 'we', pady = 10)
+            
         
         # Constants funtions
         def _progress_bar(self):
@@ -63,9 +79,13 @@ class DownloadClass(tk.Tk):
         
         
         def _updating_progress_bar(self):
+            """ Private funtion manager of update the progress
+            bar.
+            """
+            
             for updating in range(0, 81, 20):
                 self.bar['value'] = updating
-                _update_window()
+                _update_window(self)
                 time.sleep(1)
             
                 
@@ -91,12 +111,12 @@ class DownloadClass(tk.Tk):
             self.completed = tk.Label(self._frame, text = 'Completed!', font = _LYRICS[1], fg = 'red')
             self.completed.grid(row = 10, columnspan = 2, sticky = 'we')
             
-            _update_window() # Update window
+            _update_window(self) # Update window
             
             return self.loaded
 
         
-        def _clear_all(self):
+        def _clear_all_completed(self):
             """ Private funtion manager of clean the window with 
             the default values.
             """
@@ -107,19 +127,36 @@ class DownloadClass(tk.Tk):
             _PATH_DIR = None
             
             
-            # Destory the progress, completed and the message thanks after 8 seconds
+            # Destory the progress, completed and the thanks message after 8 seconds
             self.bar.after(8000, self.bar.destroy)
-            self.completed.after(8000, self.completed.destroy)
             self.loaded.after(8000, self.loaded.destroy)
-            
+            self.completed.after(8000, self.completed.destroy)      
         
-        def _url_downloads():
-            """ Private funtion manager of downloads the types
-            'URL' and 'Torrent' from the options.
+        
+        def _clear_all_uncompleted(self):
+            """ Private funtion manager of clean the window when
+            the download has failed.
             """
             
-            if _PATH_DIR:
-                # Reassignament variables and starts progress bar
+            _URL.set('')
+            _TYPES.set('Types')
+            _RENAME.set('')
+            _PATH_DIR = None
+            
+            
+            # Destory the progress, completed and the error after 8 seconds
+            self.bar.destroy()
+            self.wait.destroy()
+            self.any_error.after(8000, self.any_error.destroy)
+        
+        
+        try:
+            def _url_downloads():
+                """ Private funtion manager of downloads the types
+                'URL' and 'Torrent' from the options.
+                """
+            
+                # Re-assignament variables and starts progress bar
                 _progress_bar(self)
                 rename = _RENAME.get()
                 url = _URL.get()
@@ -142,18 +179,16 @@ class DownloadClass(tk.Tk):
                         
                 # Show the resume
                 _downloaded(self)
-                _clear_all(self)
+                _clear_all_completed(self)
             
                 
-        # URL download 
-        if _TYPES.get() == 'URL':
-            if _PATH_DIR:
+            # URL download 
+            if _TYPES.get() == 'URL':
                 _url_downloads() # Call private funtion
             
             
-        # YouTube download
-        elif _TYPES.get() == 'Youtube':
-            if _PATH_DIR:
+            # YouTube download
+            elif _TYPES.get() == 'Youtube':
                 # Starts the progress bar and update the window
                 _progress_bar(self) 
                 self._root.update()
@@ -170,12 +205,11 @@ class DownloadClass(tk.Tk):
                 
                 # Show the path, clear all and thanks
                 _downloaded(self)
-                _clear_all(self)
+                _clear_all_completed(self)
+       
                 
-                
-        # YT Playlist download
-        elif _TYPES.get() == 'YT Playlist':
-            if _PATH_DIR:
+            # YT Playlist download
+            elif _TYPES.get() == 'YT Playlist':
                 # Starts the progress bar and update the window
                 _progress_bar(self)
                 self._root.update()
@@ -192,14 +226,17 @@ class DownloadClass(tk.Tk):
             
                 # Show the path, clear all and thanks
                 _downloaded(self)
-                _clear_all(self)
+                _clear_all_completed(self)
          
                              
-        # Torrent download
-        elif _TYPES.get() == 'Torrent':
-            if _PATH_DIR:
+            # Torrent download
+            elif _TYPES.get() == 'Torrent':
                 _url_downloads() # Call private funtion
         
-        
+        except:
+            _any_error(self) # Call exclusive private funtion 
+            _clear_all_uncompleted(self) # Clear everything
+            
+            
         # Update the window    
-        _update_window()  
+        _update_window(self)  

@@ -6,7 +6,7 @@ from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
 
 
-# Sys info
+# System info
 import platform
 import sys
 
@@ -19,6 +19,11 @@ class MenuClass(tk.Tk):
         
         # Assignament variables
         self._root = Root
+        
+        
+        # ICO image for windows
+        if sys.platform.startswith('win'):
+            self._root.iconbitmap('.\\img\\icon.ico')
         
         
         # Constants variables
@@ -69,6 +74,7 @@ class MenuClass(tk.Tk):
         def _exit():
             ExitClass(self._root)    
             
+                       
 class HelpClass(tk.Tk):
     """ Class help manager """
     
@@ -101,7 +107,7 @@ class HelpClass(tk.Tk):
         
         
         # Constants funtions
-        def _update_window():
+        def _update_window(self):
             """ Private funtion managet to update the window 
             of the program.
             """
@@ -136,17 +142,17 @@ class HelpClass(tk.Tk):
         # Texts
         _TEXTS = [
             (
-                'The porpuse of this program is makes your life more easy, '
+                'The purpose of this program is makes your life more easy, '
                 'but please read the instructions to you don\'t make mistakes.'
              ),
             (
-                '01 - Makes sure that the \'URL\' is the correct.'
+                '01 - You should make sure that the \'URL\' is the correct.'
                 '\n\n'
-                '02 - The only holder that\'s not necessary is the \'RENAME\' holder.'
+                '02 - The only fields that\ aren\'t necessary fill out are \'RENAME\' field and \'OPEN FOLDER\' field.'
                 '\n\n'
                 '03 - If you rename your file please puts the correct extension of the file.'
                 '\n\n'
-                '04 - You can update your choise selecting a new type and the click in the button \'UPDATE TYPE\'.'
+                '04 - You can update your choise selecting a new type and the click in the button \'UPDATE THE TYPE\'.'
                 '\n\n'
                 '05 - Remember to be patient with the download because depends of your internet conection.'
                 '\n\n'
@@ -166,7 +172,7 @@ class HelpClass(tk.Tk):
 
 
         # Update window    
-        _update_window()
+        _update_window(self)
 
 
 class VersionClass(tk.Tk):
@@ -218,7 +224,7 @@ class ExitClass(tk.Tk):
         # Exit Message
         exit = messagebox.askquestion(
             parent = self._root,
-            title = 'Exit Program',
+            title = 'Exit',
             message = 'Do you want to leave of the program?'
         )      
         

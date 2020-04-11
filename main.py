@@ -24,11 +24,16 @@ class MainClass(tk.Tk):
     def __init__(self, Root, *args, **kwargs):
         """ Method of init when the program starts """  
             
-        # Assigment variables
+        # Assignament variables
         self._root = Root
         self._root.title('Getit')
-        self._root.geometry('600x600')
+        self._root.geometry('600x610')
         self._root.resizable(False, False)
+        
+        
+        # ICO image for windows
+        if sys.platform.startswith('win'):
+            self._root.iconbitmap('.\\img\\icon.ico')
         
         
         # Canvas, frame and scroll bar 
@@ -50,12 +55,12 @@ class MainClass(tk.Tk):
         )
         
         
-        # Contants variables inserts
+        # Constants variables inserts
         _URL = tk.StringVar()
         _TYPES = tk.StringVar()
         _RENAME = tk.StringVar()
         
-        if sys.platform.startswith('linux'): # Check current OS
+        if sys.platform.startswith('lin') or sys.platform.startswith('Lin'): # Check current OS
             self._PATH_DIR = '~/'
         
         else:
@@ -63,7 +68,7 @@ class MainClass(tk.Tk):
         
            
         # Update window
-        def _update_window():
+        def _update_window(self):
             """ Private funtion managet to update the window 
             of the program.
             """
@@ -74,9 +79,9 @@ class MainClass(tk.Tk):
             self._frame.pack()
             
             
-        # Show the holder rename when is called
+        # Show the field rename when is called
         def _rename():
-            """ Private funtion that show the holder rename if
+            """ Private funtion that show the field rename if
             the selection is 'URL' or 'Torrent'.
             """
             
@@ -93,7 +98,7 @@ class MainClass(tk.Tk):
             number 01.
             """
             
-            error_01_text = 'Please complete all the holders and select all the options!' # Text
+            error_01_text = 'Please complete all the fields and select all the options!' # Text
                 
             error_01_label = tk.Label(self._frame, text = error_01_text, font = _LYRICS[1], fg = 'red', wraplength = 400)
             error_01_label.grid(row = 8, columnspan = 2, sticky = 'we', pady = 10)             
@@ -147,7 +152,7 @@ class MainClass(tk.Tk):
         sort.grid(row = 3, column = 1, sticky = 'we', pady = 5)
         
         
-        # Button that allow continue to the another holders
+        # Button that allow continue to the another fields
         go_head = tk.Button(self._frame, text = 'Continue', cursor = 'hand2', command = lambda:_continue())
         go_head.config(relief = 'groove', borderwidth = 2, font = _LYRICS[1])
         go_head.grid(row = 4, columnspan = 2, sticky = 'we', pady = 5)
@@ -212,18 +217,13 @@ class MainClass(tk.Tk):
                     """ Private funtion manager of initialize the module called
                     'download.py'.
                     """
-
-                    # Check the path is on and call the module 'download.py'
-                    if self._PATH_DIR == None:
-                        _error_01()
                     
-                    else:
-                        DownloadClass(self._root, self._canvas, self._frame, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS)  
+                    DownloadClass(self._root, self._canvas, self._frame, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS)  
                         
                 
                 # Button that allow update the type 
-                go_back = tk.Button(self._frame, text = 'Update Type', cursor = 'hand2', command = lambda:_update_type(self))
-                go_back.config(relief = 'groove', borderwidth = 2, font = _LYRICS[1], fg = 'red')
+                go_back = tk.Button(self._frame, text = 'Update The Type', command = lambda:_update_type(self))
+                go_back.config(cursor = 'hand2', relief = 'groove', borderwidth = 2, font = _LYRICS[1], fg = 'red')
                 go_back.grid(row = 8, columnspan = 2, sticky = 'we', pady = 10)
                 
                 
@@ -233,7 +233,7 @@ class MainClass(tk.Tk):
                     """
                     
                     if _TYPES.get() == 'URL' or _TYPES.get() == 'Torrent':
-                        _rename()
+                        _rename() # Call private funtion 'rename'
                         
                     elif _TYPES.get() == 'Youtube' or _TYPES.get() == 'YT Playlist':
                         self.rename_label.destroy()
@@ -241,7 +241,7 @@ class MainClass(tk.Tk):
                         
         
         # Update and grid of the window
-        _update_window()
+        _update_window(self)
         
         
         # Calls class
@@ -259,4 +259,4 @@ def _main_funtion():
 
 
 if __name__ == '__main__':
-    _main_funtion() # Zero Init
+    _main_funtion() # Starts the execution

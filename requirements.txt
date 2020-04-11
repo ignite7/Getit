@@ -1,0 +1,4 @@
+# Indispensable libraries
+Pillow==7.0.0 
+pytube3==9.6.4
+urllib3==1.25.8
