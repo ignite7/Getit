@@ -17,7 +17,7 @@ import sqlite3
 class RecoveryClass(tk.Tk):
     """ Class url recovery manager """
     
-    def __init__(self, Root, Url, Types, Rename, Path, Lyrics, Connection):
+    def __init__(self, Root, Url, Types, Rename, Path, Lyrics):
         """ Main initial method of url recovery """
         
         # Assignament variables
@@ -40,7 +40,6 @@ class RecoveryClass(tk.Tk):
         _RENAME = Rename
         _PATH_DIR = Path
         _LYRICS = Lyrics
-        _CONNECTION = Connection
         
         
         # Canvas, frame and scroll bar
@@ -85,5 +84,9 @@ class RecoveryClass(tk.Tk):
         else:
             recovery = ImageTk.PhotoImage(Image.open('.\\img\\url_recovery.png'))
             _url_recovery_complement() 
+        
+        
+        self.rename_label = tk.Label(self._frame, text = 'Rename the file:', font = _LYRICS[1], fg = 'red')
+        self.rename_label.grid(row = 1, column = 0, sticky = 'e', padx = 5)
         
         _update_window(self) # Update window    

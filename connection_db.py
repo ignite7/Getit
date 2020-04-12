@@ -1,15 +1,16 @@
 """ All libraries and modules imported """
 
-# System info
-import platform
-import sys
+# Tkinter 
+import tkinter as tk
+from tkinter import ttk, filedialog, messagebox
+from PIL import Image, ImageTk
 
 
 # Sqlite3 library
 import sqlite3
 
 
-class ConnectionClass(object):
+class ConnectionClass(tk.Tk):
     """ Class connection data base manager """
     
     def __init__(self, Url, Types, Rename, Path):
@@ -20,6 +21,8 @@ class ConnectionClass(object):
         _TYPES = Types 
         _RENAME = Rename
         _PATH_DIR = Path
+        _DATES = (_URL.get(), _TYPES.get(), _RENAME.get(), _PATH_DIR)
+        
         
         # Data base connection
         connect_db = sqlite3.connect('./url_recovery.sqlite3')
@@ -30,26 +33,18 @@ class ConnectionClass(object):
         try:
             cursor_db.execute(
                 ''' CREATE TABLE backups (
-                        id INT PRIMARY KEY AUTO_INCREMENT,
-                        url VARCHAR(250) NOT NULL,
-                        type VARCHAR(30) NOT NULL,
-                        rename VARCHAR(100) NOT NULL,
-                        path VARCHAR(100) NOT NULL,
-                        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                        active TINYINT(1) NOT NULL DEFAULT '1'
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    url TEXT,
+                    type TEXT,
+                    rename TEXT,
+                    path TEXT
                 ) '''
             )
 
-        except sqlite3.OperationalError:
-            _DATES = (
-                _URL.get(),
-                _TYPES.get(),
-                _RENAME.get(),
-                _PATH_DIR
-            )
+            cursor_db.execute('INSERT INTO backups VALUES (2, "null", "null", "null", "null")') # Starts with example
             
-            if _URL.get() != '' and _TYPES != 'Types':
-                cursor_db.execute('INSERT INTO backups (url, type, rename, path) VALUES (?, ?, ?, ?)', _DATES)
+        except sqlite3.OperationalError:
+            cursor_db.execute('INSERT INTO backups VALUES (NULL, ?, ?, ?, ?)', _DATES)  
                 
         finally:
             connect_db.commit()

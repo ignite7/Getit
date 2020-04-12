@@ -57,9 +57,7 @@ class MainClass(tk.Tk):
             ('Courier New', 11, 'italic')
         )
         
-        _CONNECTION = ConnectionClass(_URL, _TYPES, _RENAME, self._PATH_DIR) # Module
-        _RECOVERY = lambda: RecoveryClass(self._root, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS, _CONNECTION) # Module
-        
+        _RECOVERY = lambda: RecoveryClass(self._root, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS) # Module
         
         # Canvas, frame and scroll bar 
         self._scroll = tk.Scrollbar(self._root)
@@ -223,6 +221,7 @@ class MainClass(tk.Tk):
                     'download.py'.
                     """
                     
+                    ConnectionClass(_URL, _TYPES, _RENAME, self._PATH_DIR) # Initialize data base module
                     DownloadClass(self._root, self._canvas, self._frame, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS)  
                         
                 
@@ -242,17 +241,17 @@ class MainClass(tk.Tk):
                         
                     elif _TYPES.get() == 'Youtube' or _TYPES.get() == 'YT Playlist':
                         self.rename_label.destroy()
-                        self.rename.destroy()
+                        self.rename.destroy()        
                         
-        
+                        
         # Update and grid of the window
         _update_window(self)
         
         
         # Calls class
         MenuClass(self._root, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS, _RECOVERY) # Module 'menu.py'
-        
-        
+
+ 
 def _getit():
     """ Private function that handle the engine of 
     the program
