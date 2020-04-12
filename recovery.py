@@ -86,7 +86,19 @@ class RecoveryClass(tk.Tk):
             _url_recovery_complement() 
         
         
-        self.rename_label = tk.Label(self._frame, text = 'Rename the file:', font = _LYRICS[1], fg = 'red')
-        self.rename_label.grid(row = 1, column = 0, sticky = 'e', padx = 5)
+        connect_db = sqlite3.connect('./url_recovery.sqlite3')
+        cursor_db = connect_db.cursor()
+        
+        try:
+            cursor_db.execute('SELECT * FROM backups WHERE id >= 3')
+            print_db = cursor_db.fetchall()
+        
+        finally:
+            connect_db.commit()
+            connect_db.close() # Connection closed
+
+        for dates in print_db:
+            self.re_label = tk.Label(self._frame, text = f'{dates[:]}', font = _LYRICS[1], fg = 'red')
+            self.re_label.grid(row = 1, column = 0, sticky = 'e', padx = 5)
         
         _update_window(self) # Update window    

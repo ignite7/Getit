@@ -37,14 +37,16 @@ class ConnectionClass(tk.Tk):
                     url TEXT,
                     type TEXT,
                     rename TEXT,
-                    path TEXT
+                    path TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    active TINYINT(1) DEFAULT '1'
                 ) '''
             )
 
-            cursor_db.execute('INSERT INTO backups VALUES (2, "null", "null", "null", "null")') # Starts with example
+            cursor_db.execute('INSERT INTO backups (url, type, rename, path) VALUES (?, ?, ?, ?)', _DATES) 
             
         except sqlite3.OperationalError:
-            cursor_db.execute('INSERT INTO backups VALUES (NULL, ?, ?, ?, ?)', _DATES)  
+            cursor_db.execute('INSERT INTO backups (url, type, rename, path) VALUES (?, ?, ?, ?)', _DATES)  
                 
         finally:
             connect_db.commit()
