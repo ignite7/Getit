@@ -16,6 +16,7 @@ import sys
 from menu import MenuClass
 from download import DownloadClass
 from recovery import RecoveryClass
+from connection_db import ConnectionClass
 
 
 class MainClass(tk.Tk):
@@ -43,7 +44,6 @@ class MainClass(tk.Tk):
         _TYPES = tk.StringVar()
         _RENAME = tk.StringVar()
         _USER = getpass.getuser() # Get the user name
-        _RECOVERY = lambda: RecoveryClass(self._root, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS) # Module 'recovery.py'
         
         if sys.platform.startswith('linux'): 
             self._PATH_DIR = f'/home/{_USER}'
@@ -51,13 +51,14 @@ class MainClass(tk.Tk):
         else:
             self._PATH_DIR = f'C:\\Users\\{_USER}\\Downloads'
         
-        
-        # Lyrics
         _LYRICS = (
             ('Courier New', 12, 'bold'),
             ('Courier New', 11, 'normal'),
             ('Courier New', 11, 'italic')
         )
+        
+        _CONNECTION = ConnectionClass(_URL, _TYPES, _RENAME, self._PATH_DIR) # Module
+        _RECOVERY = lambda: RecoveryClass(self._root, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS, _CONNECTION) # Module
         
         
         # Canvas, frame and scroll bar 

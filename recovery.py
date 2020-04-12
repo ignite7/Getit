@@ -17,7 +17,7 @@ import sqlite3
 class RecoveryClass(tk.Tk):
     """ Class url recovery manager """
     
-    def __init__(self, Root, Url, Types, Rename, Path, Lyrics):
+    def __init__(self, Root, Url, Types, Rename, Path, Lyrics, Connection):
         """ Main initial method of url recovery """
         
         # Assignament variables
@@ -40,6 +40,7 @@ class RecoveryClass(tk.Tk):
         _RENAME = Rename
         _PATH_DIR = Path
         _LYRICS = Lyrics
+        _CONNECTION = Connection
         
         
         # Canvas, frame and scroll bar
@@ -63,8 +64,8 @@ class RecoveryClass(tk.Tk):
             self._canvas.config(scrollregion = self._canvas.bbox('all'))
             self._canvas.pack()
             self._frame.pack()
-            
-            
+         
+         
         # Short part of code of the logo
         def _url_recovery_complement():
             """ Private function manager to complement the 
@@ -85,4 +86,4 @@ class RecoveryClass(tk.Tk):
             recovery = ImageTk.PhotoImage(Image.open('.\\img\\url_recovery.png'))
             _url_recovery_complement() 
         
-        _update_window(self)
+        _update_window(self) # Update window    
