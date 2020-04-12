@@ -15,6 +15,7 @@ import sys
 # Modules
 from menu import MenuClass
 from download import DownloadClass
+from recovery import RecoveryClass
 
 
 class MainClass(tk.Tk):
@@ -37,15 +38,18 @@ class MainClass(tk.Tk):
             self._root.iconbitmap('.\\img\\icon.ico')
         
         
-        # Canvas, frame and scroll bar 
-        self._scroll = tk.Scrollbar(self._root)
-        self._canvas = tk.Canvas(self._root, yscrollcommand = self._scroll.set)
-
-        self._scroll.config(command = self._canvas.yview)
-        self._scroll.pack(side = 'right', fill = 'y')
-
-        self._frame = tk.Frame(self._canvas)
-        self._canvas.create_window(0, 0, window = self._frame, anchor = 'center')
+        # Constants variables inserts
+        _URL = tk.StringVar()
+        _TYPES = tk.StringVar()
+        _RENAME = tk.StringVar()
+        _USER = getpass.getuser() # Get the user name
+        _RECOVERY = lambda: RecoveryClass(self._root, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS) # Module 'recovery.py'
+        
+        if sys.platform.startswith('linux'): 
+            self._PATH_DIR = f'/home/{_USER}'
+        
+        else:
+            self._PATH_DIR = f'C:\\Users\\{_USER}\\Downloads'
         
         
         # Lyrics
@@ -56,17 +60,15 @@ class MainClass(tk.Tk):
         )
         
         
-        # Constants variables inserts
-        _URL = tk.StringVar()
-        _TYPES = tk.StringVar()
-        _RENAME = tk.StringVar()
-        _USER = getpass.getuser() # Get the user name
-        
-        if sys.platform.startswith('linux'): # Check current OS
-            self._PATH_DIR = f'/home/{_USER}'
-        
-        else:
-            self._PATH_DIR = f'C:\\Users\\{_USER}\\Downloads'
+        # Canvas, frame and scroll bar 
+        self._scroll = tk.Scrollbar(self._root)
+        self._canvas = tk.Canvas(self._root, yscrollcommand = self._scroll.set)
+
+        self._scroll.config(command = self._canvas.yview)
+        self._scroll.pack(side = 'right', fill = 'y')
+
+        self._frame = tk.Frame(self._canvas)
+        self._canvas.create_window(0, 0, window = self._frame, anchor = 'center')
         
            
         # Update window
@@ -247,8 +249,8 @@ class MainClass(tk.Tk):
         
         
         # Calls class
-        MenuClass(self._root, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS) # Module 'menu.py'
-
+        MenuClass(self._root, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS, _RECOVERY) # Module 'menu.py'
+        
         
 def _getit():
     """ Private function that handle the engine of 

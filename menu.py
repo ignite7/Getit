@@ -14,7 +14,7 @@ import sys
 class MenuClass(tk.Tk):
     """ Class menu manager """
     
-    def __init__(self, Root, Url, Types, Rename, Path, Lyrics):
+    def __init__(self, Root, Url, Types, Rename, Path, Lyrics, Recovery):
         """ Main initial method of menu """
         
         # Assignament variables
@@ -24,7 +24,7 @@ class MenuClass(tk.Tk):
         # ICO image for windows
         if sys.platform.startswith('win'):
             self._root.iconbitmap('.\\img\\icon.ico')
-        
+            
         
         # Constants variables
         _URL = Url
@@ -32,6 +32,7 @@ class MenuClass(tk.Tk):
         _RENAME = Rename
         _PATH_DIR = Path
         _LYRICS = Lyrics
+        _RECOVERY = Recovery
         
         
         # Assignament menu
@@ -39,40 +40,23 @@ class MenuClass(tk.Tk):
         self._root.config(menu = menu)
         
         
-        # Option help
+        # Help
         menu_help = tk.Menu(menu, tearoff = False)
         menu.add_cascade(label = 'Help', menu = menu_help)
         
-        menu_help.add_command(label = 'Manual', command = lambda: _help())
+        menu_help.add_command(label = 'Manual', command = lambda: HelpClass(self._root, _LYRICS))
         menu_help.add_separator()
-        menu_help.add_command(label = 'Version', command = lambda: _version())
-        menu_help.add_command(label = 'About Me', command = lambda: _about_me())
+        menu_help.add_command(label = 'Version', command = lambda: VersionClass(self._root))
+        menu_help.add_command(label = 'About Me', command = lambda: AboutMeClass(self._root))
         menu_help.add_separator()
-        menu_help.add_command(label = 'Exit', command = lambda: _exit())
+        menu_help.add_command(label = 'Exit', command = lambda: ExitClass(self._root))
         
         
-        # Option recovery url
+        # Options
         menu_options = tk.Menu(menu, tearoff = False)
         menu.add_cascade(label = 'Options', menu = menu_options)
         
-        menu_options.add_command(label = 'Recovery URL')
-        
-        
-        # Menu functions
-        def _help():
-            HelpClass(self._root, _LYRICS)
-            
-        
-        def _version():
-            VersionClass(self._root)
-            
-        
-        def _about_me():
-            AboutMeClass(self._root)
-            
-        
-        def _exit():
-            ExitClass(self._root)    
+        menu_options.add_command(label = 'URL Recovery', command = _RECOVERY)
             
                        
 class HelpClass(tk.Tk):
@@ -82,9 +66,6 @@ class HelpClass(tk.Tk):
         """ Main initial method of Help """
         # Assignament variables
         self._root = Root
-        
-        
-        # Constants variables
         _LYRICS = Lyrics
         
         
