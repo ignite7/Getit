@@ -19,7 +19,7 @@ class ConnectionClass(object):
         
         # Data base connection and dates insertion 
         try:
-            connect_db = sqlite3.connect('./url_recovery.sqlite3')
+            connect_db = sqlite3.connect('./data_base/url_recovery.sqlite3')
             cursor_db = connect_db.cursor()
                 
             cursor_db.execute(
