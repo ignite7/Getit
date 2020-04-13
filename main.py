@@ -15,8 +15,8 @@ import sys
 # Modules
 from menu import MenuClass
 from download import DownloadClass
-from recovery import RecoveryClass
-from connection_db import ConnectionClass
+from data_base.recovery import RecoveryClass
+from data_base.connection_db import ConnectionClass
 
 
 class MainClass(tk.Tk):

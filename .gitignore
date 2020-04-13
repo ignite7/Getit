@@ -1,5 +1,7 @@
 # Ignore python cache
+data_base/__pycache__/*
 __pycache__/*
 
+
 # Ignore data base Sqlite3
-url_recovery.sqlite3
+data_base/*.sqlite3
