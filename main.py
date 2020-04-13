@@ -59,7 +59,6 @@ class MainClass(tk.Tk):
         
         _RECOVERY = lambda: RecoveryClass(self._root, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS) # Module
         
-        
         # Canvas, frame and scroll bar 
         self._scroll = tk.Scrollbar(self._root)
         self._canvas = tk.Canvas(self._root, yscrollcommand = self._scroll.set)

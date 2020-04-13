@@ -5,6 +5,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
 
+
 # System info
 import platform
 import sys
@@ -43,8 +44,9 @@ class RecoveryClass(tk.Tk):
             _URL = Url
             _TYPES = Types 
             _RENAME = Rename
-            _PATH_DIR = Path
+            self._PATH_DIR = Path
             _LYRICS = Lyrics
+            _ID = tk.StringVar() # Get id
         
         
             # Canvas, frame and scroll bar
@@ -96,7 +98,7 @@ class RecoveryClass(tk.Tk):
             
                 recovery_label = tk.Label(self._frame, image = recovery)
                 recovery_label.image = recovery # Reference
-                recovery_label.grid(row = 0, columnspan = 1, column = 0, sticky = 'nswe', pady = 20)
+                recovery_label.grid(row = 0, columnspan = 3, column = 0, sticky = 'nswe', pady = 20)
          
             
             # Image
@@ -115,14 +117,47 @@ class RecoveryClass(tk.Tk):
                 dates of the data base in screen.
                 """
             
-                self.cursor_db.execute('SELECT * FROM backups WHERE id >= 3')
+                self.cursor_db.execute('SELECT id, url, type FROM backups')
                 print_db = self.cursor_db.fetchall()
+                dates = [date[:] for date in print_db]
+                
+                fetch = tk.Listbox(self._frame, width = 60, cursor = 'hand2', font = _LYRICS[1])
+                fetch.grid(row = 1, columnspan = 3, sticky = 'we')
+                
+                space = ' ' * 15
+                fetch.insert(tk.END, f'ID{space}URL{space}TYPE') # Titles
+                
+                for idx, items in enumerate(dates):
+                    fetch.insert(idx + 1, items)
+                    
+                label_id = tk.Label(self._frame, text = 'Insert ID:', font = _LYRICS[1])
+                label_id.grid(row = 2, column = 0, padx = 5, pady = 20)
+                
+                insert_id = tk.Entry(self._frame, font = _LYRICS[1], width = 15, textvariable = _ID)
+                insert_id.grid(row = 2, column = 1, padx = 5, pady = 20)
+                
+                _ID.set('1') # Set '1' by default
+                button_id = tk.Button(self._frame, text = 'Select And Copy!', command = lambda: _get_id(self))
+                button_id.config(relief = 'groove', borderwidth = 2, cursor = 'hand2', font = _LYRICS[1], fg = 'red')
+                button_id.grid(row = 2, column = 2, padx = 5, pady = 20)
+                
             
+            @_connection_db    
+            def _get_id(self):
+                """ Private function manager to put the 
+                data again in the fields.
+                """
+                
+                self.cursor_db.execute('SELECT url, type, rename, path FROM backups WHERE id =' + _ID.get())
+                print_db = self.cursor_db.fetchall()
+                
                 for dates in print_db:
-                    self.re_label = tk.Label(self._frame, text = f'{dates[:]}', font = _LYRICS[1])
-                    self.re_label.grid(row = 1, column = 0, sticky = 'e', padx = 5)
-        
-        
+                    _URL.set(dates[0])
+                    _TYPES.set(dates[1])
+                    _RENAME.set(dates[2])
+                    self._PATH_DIR = f'{dates[3]}' # Break
+                
+
             _fetch_db(self) # Call function
             _update_window(self) # Update window
         
