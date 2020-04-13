@@ -1,16 +1,9 @@
 """ All libraries and modules imported """
-
-# Tkinter 
-import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
-from PIL import Image, ImageTk
-
-
 # Sqlite3 library
 import sqlite3
 
 
-class ConnectionClass(tk.Tk):
+class ConnectionClass(object):
     """ Class connection data base manager """
     
     def __init__(self, Url, Types, Rename, Path):
@@ -24,13 +17,11 @@ class ConnectionClass(tk.Tk):
         _DATES = (_URL.get(), _TYPES.get(), _RENAME.get(), _PATH_DIR)
         
         
-        # Data base connection
-        connect_db = sqlite3.connect('./url_recovery.sqlite3')
-        cursor_db = connect_db.cursor()
-        
-        
-        # Data base creation
+        # Data base connection and dates insertion 
         try:
+            connect_db = sqlite3.connect('./url_recovery.sqlite3')
+            cursor_db = connect_db.cursor()
+                
             cursor_db.execute(
                 ''' CREATE TABLE backups (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,4 +41,4 @@ class ConnectionClass(tk.Tk):
                 
         finally:
             connect_db.commit()
-            connect_db.close() # Connection closed
+            connect_db.close()                  

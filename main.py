@@ -59,6 +59,7 @@ class MainClass(tk.Tk):
         
         _RECOVERY = lambda: RecoveryClass(self._root, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS) # Module
         
+        
         # Canvas, frame and scroll bar 
         self._scroll = tk.Scrollbar(self._root)
         self._canvas = tk.Canvas(self._root, yscrollcommand = self._scroll.set)
@@ -218,10 +219,10 @@ class MainClass(tk.Tk):
         
                 def _download(self):
                     """ Private function manager of initialize the module called
-                    'download.py'.
+                    'download.py' and 'connection_db.py'.
                     """
                     
-                    ConnectionClass(_URL, _TYPES, _RENAME, self._PATH_DIR) # Initialize data base module
+                    ConnectionClass(_URL, _TYPES, _RENAME, self._PATH_DIR) 
                     DownloadClass(self._root, self._canvas, self._frame, _URL, _TYPES, _RENAME, self._PATH_DIR, _LYRICS)  
                         
                 
