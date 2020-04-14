@@ -27,12 +27,12 @@ class MenuClass(tk.Tk):
             
         
         # Constants variables
-        _URL = Url
-        _TYPES = Types 
-        _RENAME = Rename
-        _PATH_DIR = Path
-        _LYRICS = Lyrics
-        _RECOVERY = Recovery
+        self.URL = Url
+        self.TYPES = Types 
+        self.RENAME = Rename
+        self.PATH_DIR = Path
+        self.LYRICS = Lyrics
+        self.RECOVERY = Recovery
         
         
         # Assignament menu
@@ -44,31 +44,71 @@ class MenuClass(tk.Tk):
         menu_help = tk.Menu(menu, tearoff = False)
         menu.add_cascade(label = 'Help', menu = menu_help)
         
-        menu_help.add_command(label = 'Manual', command = lambda: HelpClass(self._root, _LYRICS))
+        menu_help.add_command(label = 'Manual', command = lambda: HelpClass(self._root, self.LYRICS))
         menu_help.add_separator()
-        menu_help.add_command(label = 'Version', command = lambda: VersionClass(self._root))
-        menu_help.add_command(label = 'About Me', command = lambda: AboutMeClass(self._root))
+        menu_help.add_command(label = 'Version', command = lambda: self._version())
+        menu_help.add_command(label = 'About Me', command = lambda: self._about_me())
         menu_help.add_separator()
-        menu_help.add_command(label = 'Exit', command = lambda: ExitClass(self._root))
+        menu_help.add_command(label = 'Exit', command = lambda: self._exit())
         
         
         # Options
         menu_options = tk.Menu(menu, tearoff = False)
         menu.add_cascade(label = 'Options', menu = menu_options)
         
-        menu_options.add_command(label = 'URL Recovery', command = _RECOVERY)
-            
+        menu_options.add_command(label = 'URL Recovery', command = self.RECOVERY)
+    
+    
+    def _version(self):  
+        """ Private function manager to show
+        the version of the program.
+        """
+          
+        version = messagebox.showinfo(
+            parent = self._root,
+            title = 'Version',
+            message = 'Program Version: 1.0 \n\nLenguage Version: Python-3.8.X'
+        )
+
+
+    def _about_me(self):  
+        """ Private function manager to show
+        the about me of the program.
+        """
+          
+        about_me = messagebox.showinfo(
+            parent = self._root,
+            title = 'About Me',
+            message = 'Author: Sergio van Berkel Acosta \n\nContact: www.sergiovanberkel.com'
+        )
+
+
+    def _exit(self):
+        """ Private function manager to show
+        the exit of the program.
+        """
+        
+        leave = messagebox.askquestion(
+            parent = self._root,
+            title = 'Exit',
+            message = 'Do you want to leave of the program?'
+        )      
+        
+        if leave == 'yes':
+            self._root.destroy()
+                
                        
 class HelpClass(tk.Tk):
     """ Class help manager """
     
     def __init__(self, Root, Lyrics):
         """ Main initial method of Help """
+        
         # Assignament variables
         self._root = Root
-        _LYRICS = Lyrics
-        
-        
+        self.LYRICS = Lyrics
+    
+    
         # Window
         self._main_window = tk.Toplevel(self._root)
         self._main_window.title('Manual')
@@ -77,51 +117,28 @@ class HelpClass(tk.Tk):
         
         
         # Canvas, frame and scroll bar
-        _scroll = tk.Scrollbar(self._main_window)
-        self._canvas = tk.Canvas(self._main_window, yscrollcommand = _scroll.set)
+        scroll = tk.Scrollbar(self._main_window)
+        self._canvas = tk.Canvas(self._main_window, yscrollcommand = scroll.set)
         
-        _scroll.config(command = self._canvas.yview)
-        _scroll.pack(side = 'right', fill = 'y')
+        scroll.config(command = self._canvas.yview)
+        scroll.pack(side = 'right', fill = 'y')
         
         self._frame = tk.Frame(self._canvas)
         self._canvas.create_window(0, 0, window = self._frame, anchor = 'nw')
         
         
-        # Constants functions
-        def _update_window(self):
-            """ Private function managet to update the window 
-            of the program.
-            """
-            
-            self._main_window.update()
-            self._canvas.config(scrollregion = self._canvas.bbox('all'))
-            self._canvas.pack()
-            self._frame.pack()
-        
-        
-        # Short part of code of the logo
-        def _manual_complement():
-            """ Private function manager to complement the 
-            manual image.
-            """
-            
-            manual_label = tk.Label(self._frame, image = manual)
-            manual_label.image = manual # Reference
-            manual_label.grid(row = 0, columnspan = 1, column = 0, sticky = 'nswe', pady = 20)
-         
-            
         # Image
         if sys.platform.startswith('linux'):
-            manual = ImageTk.PhotoImage(Image.open('./img/manual.png'))
-            _manual_complement()
+            self.manual = ImageTk.PhotoImage(Image.open('./img/manual.png'))
+            self._logo_complement()
             
         else:
-            manual = ImageTk.PhotoImage(Image.open('.\\img\\manual.png'))
-            _manual_complement() 
-        
-        
+            self.manual = ImageTk.PhotoImage(Image.open('.\\img\\manual.png'))
+            self._logo_complement()
+            
+            
         # Texts
-        _TEXTS = [
+        TEXTS = [
             (
                 'The purpose of this program is makes your life more easy, '
                 'but please read the instructions to you don\'t make mistakes.'
@@ -149,69 +166,33 @@ class HelpClass(tk.Tk):
         
         
         # Instructions
-        instructions = tk.Label(self._frame, text = _TEXTS[0], font = _LYRICS[0], justify = 'center', wraplength = 500)
+        instructions = tk.Label(self._frame, text = TEXTS[0], font = self.LYRICS[0], justify = 'center', wraplength = 500)
         instructions.grid(row = 1, column = 0, sticky = 'we', pady = 20)
         
-        rules = tk.Label(self._frame, text = _TEXTS[1], font = _LYRICS[1], justify = 'left', wraplength = 500)
+        rules = tk.Label(self._frame, text = TEXTS[1], font = self.LYRICS[1], justify = 'left', wraplength = 500)
         rules.grid(row = 2, column = 0, sticky = 'we', pady = 10)
 
 
         # Update window    
-        _update_window(self)
-
-
-class VersionClass(tk.Tk):
-    """ Class version manager """
-    
-    def __init__(self, Root):
-        """ Main initial method of version """
-        
-        # Assignament variables
-        self._root = Root
+        self._update_window()   
         
         
-        # Version Message
-        version = messagebox.showinfo(
-            parent = self._root,
-            title = 'Version',
-            message = 'Program Version: 1.0 \n\nLenguage Version: Python-3.8.X'
-        )
-
-
-class AboutMeClass(tk.Tk):
-    """ Class About manager """
-    
-    def __init__(self, Root):
-        """ Main initial method of about """
-        
-        # Assignament variables
-        self._root = Root
-
-        
-        # About me Message
-        about_me = messagebox.showinfo(
-            parent = self._root,
-            title = 'About Me',
-            message = 'Author: Sergio van Berkel Acosta \n\nContact: www.sergiovanberkel.com'
-        )
-
-
-class ExitClass(tk.Tk):
-    """ Class About manager """
-    
-    def __init__(self, Root):
-        """ Main initial method of exit """
-    
-        # Assignament variables
-        self._root = Root
+    def _update_window(self):
+        """ Private function managet to update the window 
+        of the program.
+        """
+            
+        self._main_window.update()
+        self._canvas.config(scrollregion = self._canvas.bbox('all'))
+        self._canvas.pack()
+        self._frame.pack()
         
         
-        # Exit Message
-        exit = messagebox.askquestion(
-            parent = self._root,
-            title = 'Exit',
-            message = 'Do you want to leave of the program?'
-        )      
-        
-        if exit == 'yes':
-            self._root.destroy()
+    def _logo_complement(self):
+        """ Private function manager to complement the 
+        manual image.
+        """
+            
+        self.manual_label = tk.Label(self._frame, image = self.manual)
+        self.manual_label.image = self.manual # Reference
+        self.manual_label.grid(row = 0, columnspan = 1, column = 0, sticky = 'nswe', pady = 20)

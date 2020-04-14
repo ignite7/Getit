@@ -1,4 +1,5 @@
 """ All libraries and modules imported """
+
 # Sqlite3 library
 import sqlite3
 
@@ -10,17 +11,17 @@ class ConnectionClass(object):
         """ Main initial method of connection data base """
         
         # Constants variables
-        _URL = Url
-        _TYPES = Types 
-        _RENAME = Rename
-        _PATH_DIR = Path
+        self.URL = Url
+        self.TYPES = Types 
+        self.RENAME = Rename
+        self.PATH_DIR = Path
         
-        if _RENAME.get() == '':
-            _RENAME = 'download_getit'
-            _DATES = (_URL.get(), _TYPES.get(), _RENAME, _PATH_DIR)
+        if self.RENAME.get() == '':
+            self.RENAME = 'download_getit'
+            self.DATES = (self.URL.get(), self.TYPES.get(), self.RENAME, self.PATH_DIR)
         
         else:
-            _DATES = (_URL.get(), _TYPES.get(), _RENAME.get(), _PATH_DIR)
+            self.DATES = (self.URL.get(), self.TYPES.get(), self.RENAME.get(), self.PATH_DIR)
         
         
         # Data base connection and dates insertion 
@@ -40,10 +41,10 @@ class ConnectionClass(object):
                 ) '''
             )
 
-            cursor_db.execute('INSERT INTO backups (url, type, rename, path) VALUES (?, ?, ?, ?)', _DATES) 
+            cursor_db.execute('INSERT INTO backups (url, type, rename, path) VALUES (?, ?, ?, ?)', self.DATES) 
             
         except (sqlite3.OperationalError, sqlite3.InterfaceError):
-            cursor_db.execute('INSERT INTO backups (url, type, rename, path) VALUES (?, ?, ?, ?)', _DATES)  
+            cursor_db.execute('INSERT INTO backups (url, type, rename, path) VALUES (?, ?, ?, ?)', self.DATES)  
                 
         finally:
             connect_db.commit()
