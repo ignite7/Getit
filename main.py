@@ -15,7 +15,7 @@ import sys
 # Modules
 from tools.menu import MenuClass
 from tools.download import DownloadClass
-from data_base.recovery import RecoveryClass
+from tools.recovery import RecoveryClass
 from data_base.connection_db import ConnectionClass
 
 
