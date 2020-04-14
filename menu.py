@@ -72,7 +72,7 @@ class HelpClass(tk.Tk):
         # Window
         self._main_window = tk.Toplevel(self._root)
         self._main_window.title('Manual')
-        self._main_window.geometry('600x610')
+        self._main_window.geometry('600x630')
         self._main_window.resizable(False, False)
         
         
@@ -139,9 +139,11 @@ class HelpClass(tk.Tk):
                 'and REMEMBER sometimes there are URL\'s that have firewalls or locks, '
                 'consult the provider of the URL if you have problems.'
                 '\n\n'
-                '06 - If you want more information you can contact me in www.sergiovanberkel.com.'
+                '06 - You can copy and remove your old downloads in the options of the menu \'URL RECOVERY\'.'
                 '\n\n'
-                '07 - And finally thank you for uses this program!'
+                '07 - If you want more information you can contact me in www.sergiovanberkel.com.'
+                '\n\n'
+                '08 - And finally thank you for uses this program!'
             )
         ]
         

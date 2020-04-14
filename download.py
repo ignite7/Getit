@@ -125,7 +125,7 @@ class DownloadClass(tk.Tk):
             
             # Finish progress bar
             self.bar['value'] = 100
-            time.sleep(2)
+            time.sleep(1)
             
             
             # Destory text 'Wait...' and label indicating that has been completed

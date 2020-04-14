@@ -14,7 +14,13 @@ class ConnectionClass(object):
         _TYPES = Types 
         _RENAME = Rename
         _PATH_DIR = Path
-        _DATES = (_URL.get(), _TYPES.get(), _RENAME.get(), _PATH_DIR)
+        
+        if _RENAME.get() == '':
+            _RENAME = 'download_getit'
+            _DATES = (_URL.get(), _TYPES.get(), _RENAME, _PATH_DIR)
+        
+        else:
+            _DATES = (_URL.get(), _TYPES.get(), _RENAME.get(), _PATH_DIR)
         
         
         # Data base connection and dates insertion 
@@ -25,18 +31,18 @@ class ConnectionClass(object):
             cursor_db.execute(
                 ''' CREATE TABLE backups (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    url TEXT,
-                    type TEXT,
-                    rename TEXT,
-                    path TEXT,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    active TINYINT(1) DEFAULT '1'
+                    url TEXT NOT NULL,
+                    type TEXT NOT NULL,
+                    rename TEXT NOT NULL,
+                    path TEXT NOT NULL,
+                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    active TINYINT(1) NOT NULL DEFAULT '1'
                 ) '''
             )
 
             cursor_db.execute('INSERT INTO backups (url, type, rename, path) VALUES (?, ?, ?, ?)', _DATES) 
             
-        except sqlite3.OperationalError:
+        except (sqlite3.OperationalError, sqlite3.InterfaceError):
             cursor_db.execute('INSERT INTO backups (url, type, rename, path) VALUES (?, ?, ?, ?)', _DATES)  
                 
         finally:

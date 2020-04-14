@@ -46,7 +46,7 @@ class RecoveryClass(tk.Tk):
             _RENAME = Rename
             self._PATH_DIR = Path
             _LYRICS = Lyrics
-            _UID = tk.StringVar() # Get id
+            _UID = tk.IntVar() # Get id
         
         
             # Canvas, frame and scroll bar
@@ -98,7 +98,7 @@ class RecoveryClass(tk.Tk):
             
                 recovery_label = tk.Label(self._frame, image = recovery)
                 recovery_label.image = recovery # Reference
-                recovery_label.grid(row = 0, columnspan = 4, column = 0, sticky = 'nswe', pady = 20)
+                recovery_label.grid(row = 0, columnspan = 4, column = 0, sticky = 'nswe', pady = 10)
          
             
             # Image
@@ -117,43 +117,59 @@ class RecoveryClass(tk.Tk):
                 dates of the data base in screen.
                 """
             
-                self.cursor_db.execute('SELECT id, url, type FROM backups')
+                self.cursor_db.execute('SELECT id, url, type, rename FROM backups')
                 self.print_db = self.cursor_db.fetchall()
                 
                 
-                # ListBox creation
+                # Introduction
+                introduction = tk.Label(self._frame, text = 'Recover your old downloads in one click!', font = _LYRICS[0])
+                introduction.grid(row = 1, columnspan = 4, sticky = 'we', pady = 10)
+                
+                
+                # ListBox creation, vertical and horizontal scrollbar
+                v_scrollbar = tk.Scrollbar(self._frame, orient = 'vertical')
+                v_scrollbar.grid(row = 2, column = 4, sticky = 'ns')
+                h_scrollbar = tk.Scrollbar(self._frame, orient = 'horizontal')
+                h_scrollbar.grid(row = 3, columnspan = 4, sticky = 'we')
+                
                 self.fetch = tk.Listbox(self._frame, width = 60, height = 20, cursor = 'hand2', font = _LYRICS[1])
-                self.fetch.grid(row = 1, columnspan = 4, sticky = 'we')
+                self.fetch.config(xscrollcommand = h_scrollbar.set, yscrollcommand = v_scrollbar.set)
+                self.fetch.config(selectmode = tk.BROWSE, borderwidth = 2)
+                self.fetch.grid(row = 2, columnspan = 4, sticky = 'we')
                 
-                space = ' ' * 15
-                self.fetch.insert(tk.END, f'ID{space}URL{space}TYPE') # Titles
+                v_scrollbar.config(command = self.fetch.yview)
+                h_scrollbar.config(command = self.fetch.xview)
                 
-                
+                   
                 # Show the dates inside of listbox
+                space = ' ' * 12
+                self.fetch.insert(tk.END, f'[ID]{space}[URL]{space}[TYPE]{space}[RENAME]') # Titles 
+                
                 dates = [date[:] for date in self.print_db]
                 for idx, items in enumerate(dates):
                     self.fetch.insert(idx + 1, items)
                 
                 
                 # Uid field    
-                label_uid = tk.Label(self._frame, text = 'Insert ID:', font = _LYRICS[1])
-                label_uid.grid(row = 2, column = 0, sticky = 'e', padx = 5, pady = 20)
+                label_uid = tk.Label(self._frame, text = 'Insert ID:', font = _LYRICS[2])
+                label_uid.grid(row = 4, column = 0, sticky = 'e', padx = 5, pady = 20)
                 
-                _UID.set('1') # Set '1' by default
+                
+                _UID.set(1) # Set '1' by default
                 insert_uid = tk.Entry(self._frame, font = _LYRICS[1], width = 5, textvariable = _UID)
-                insert_uid.grid(row = 2, column = 1, sticky = 'w', padx = 5, pady = 20)
+                insert_uid.grid(row = 4, column = 1, sticky = 'w', padx = 5, pady = 20)
                 
                 
                 # Get uid button
                 button_uid = tk.Button(self._frame, text = 'Row Copy', command = lambda: _get_uid(self))
                 button_uid.config(relief = 'groove', borderwidth = 2, cursor = 'hand2', font = _LYRICS[1])
-                button_uid.grid(row = 2, column = 2, sticky = 'w', padx = 5, pady = 20)
+                button_uid.grid(row = 4, column = 2, sticky = 'w', padx = 5, pady = 20)
                 
                 
                 # Delete uid button
                 delete_uid = tk.Button(self._frame, text = 'Row Delete', command = lambda: _delete_uid(self))
                 delete_uid.config(relief = 'groove', borderwidth = 2, cursor = 'hand2', font = _LYRICS[1], fg = 'red')
-                delete_uid.grid(row = 2, column = 3, sticky = 'w', padx = 5, pady = 20)
+                delete_uid.grid(row = 4, column = 3, sticky = 'w', padx = 5, pady = 20)
                 
             
             @_connection_db    
@@ -162,16 +178,22 @@ class RecoveryClass(tk.Tk):
                 data again in the fields.
                 """
                 
-                self.cursor_db.execute(f'SELECT url, type, rename, path FROM backups WHERE id = {_UID.get()}')
+                self.cursor_db.execute(f'SELECT url, type, rename FROM backups WHERE id = {str(_UID.get())}')
                 self.print_db = self.cursor_db.fetchall()
                 
+                get_message = tk.Label(self._frame, text = f'ID: {str(_UID.get())} has been copied!')
+                get_message.config(font = _LYRICS[1], fg = 'red')
+                get_message.grid(row = 5, columnspan = 4, sticky = 'we')
                 
+            
                 # Puts the info in the main window
                 for dates in self.print_db:
                     _URL.set(dates[0])
                     _TYPES.set(dates[1])
                     _RENAME.set(dates[2])
-                    self._PATH_DIR = f'{dates[3]}' # Break
+
+                get_message.after(1000, get_message.destroy) # Destroy after 1 seconds
+                _UID.set('1') # Clean
             
             
             @_connection_db
@@ -180,9 +202,14 @@ class RecoveryClass(tk.Tk):
                 the dates from the data base.
                 """
                 
-                self.fetch.delete(_UID.get())
-                self.cursor_db.execute(f'DELETE FROM backups WHERE id = {_UID.get()}')
+                self.cursor_db.execute(f'DELETE FROM backups WHERE id = {str(_UID.get())}')
                 
+                delete_message = tk.Label(self._frame, text = f'ID: {str(_UID.get())} has been deleted!')
+                delete_message.config(font = _LYRICS[1], fg = 'red')
+                delete_message.grid(row = 5, columnspan = 4, sticky = 'we')
+                
+                delete_message.after(1000, delete_message.destroy) # Destroy after 1 seconds
+                _UID.set('1') # Clean
                 
             _fetch_db(self) # Call function
             _update_window(self) # Update window
