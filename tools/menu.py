@@ -129,7 +129,7 @@ class HelpClass(tk.Tk):
             (
                 '01 - You make sure that the \'URL\' is the correct and the file to download has permissions.'
                 '\n\n'
-                '02 - The only fields that\ aren\'t necessary fill out are \'RENAME\' field and \'OPEN FOLDER\' field.'
+                '02 - The only fields that aren\'t necessary fill out are \'RENAME\' field and \'OPEN FOLDER\' field.'
                 '\n\n'
                 '03 - If you rename your file please puts the correct extension of the file.'
                 '\n\n'
