@@ -1,6 +1,6 @@
-<p align="center"><img src="https://sergiovanberkel.com/carga_arch/2020/04/icon-1.png" width="500px"></p>
+<p align="center"><img src="https://sergiovanberkel.com/carga_arch/2020/04/icon-1.png" width="400px"></p>
 
-![](https://img.shields.io/badge/Web%20Site-sergiovanberkel.com-informational) ![](https://img.shields.io/badge/Version-v1.0-success) ![](https://img.shields.io/badge/Python-%3E%3D3.5.*-important)
+![](https://img.shields.io/badge/Web%20Site-sergiovanberkel.com-informational) ![](https://img.shields.io/badge/Version-v1.0-success)
 
 # Getit 💎
 
@@ -14,7 +14,7 @@ Button: 'Clone or Download'
 Then: 'Downlad .zip'
 ```
 
-or using the command line (Terminal):
+Or using the command line (Terminal):
 ```shell
 git clone https://github.com/ignite7/Getit.git 
 unzip Getit-master.zip
@@ -52,7 +52,7 @@ dir Getit-master
 python setup.py install
 ```
 
-Or executing the `Getit.exe` from the `Getit-master/`
+Or executing the `Getit.exe` from the `Getit-master/win32/Getit.exe`
 
 # Rules 📖
 
@@ -68,7 +68,7 @@ Or executing the `Getit.exe` from the `Getit-master/`
 
 6. You can copy and remove your old downloads in the options of the menu 'URL RECOVERY'.
 
-7. If you want more information you can contact me in www.sergiovanberkel.com.
+7. If you want more information you can contact me in [Sergio van Berkel Acosta](https://sergiovanberkel.com).
 
 8. And finally thank you for uses this program!
 

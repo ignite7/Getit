@@ -6,3 +6,7 @@ __pycache__/*
 
 # Ignore data base Sqlite3
 data_base/*.sqlite3
+
+
+# Ignore files win32
+win32/Getit-EXE/*
