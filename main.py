@@ -16,7 +16,7 @@ import sys
 from tools.menu import MenuClass as Menu
 from tools.download import DownloadClass as Download
 from tools.recovery import RecoveryClass as Recovery
-from data_base.connection_db import ConnectionClass as DateBase
+from data_base.connection_db import ConnectionClass as DataBase
 
 
 class MainClass(tk.Tk):
@@ -30,7 +30,7 @@ class MainClass(tk.Tk):
         # Assignament variables
         self._root = Root
         self._root.title('Getit')
-        self._root.geometry('600x610')
+        self._root.geometry('600x650')
         self._root.resizable(False, False)
         
         
@@ -233,7 +233,7 @@ class MainClass(tk.Tk):
         'download.py' and 'connection_db.py'.
         """
                     
-        DateBase(self.URL, self.TYPES, self.RENAME, self.PATH_DIR) 
+        DataBase(self.URL, self.TYPES, self.RENAME, self.PATH_DIR) 
         Download(self._root, self._canvas, self._frame, self.URL, self.TYPES, self.RENAME, self.PATH_DIR, self.LYRICS)
         
         

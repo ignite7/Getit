@@ -112,7 +112,7 @@ class HelpClass(tk.Tk):
         # Window
         self._main_window = tk.Toplevel(self._root)
         self._main_window.title('Manual')
-        self._main_window.geometry('600x630')
+        self._main_window.geometry('600x650')
         self._main_window.resizable(False, False)
         
         

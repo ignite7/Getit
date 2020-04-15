@@ -26,21 +26,20 @@ class RecoveryClass(tk.Tk):
         self._root = Root
         
         
+        # ICO image for windows
+        if sys.platform.startswith('win'):
+            self._root.iconbitmap('.\\img\\icon.ico')
+        
         # Check data base exists
         if os.path.exists('./data_base/url_recovery.sqlite3'):
 
             # Assignament of a new 'root'
             self._main_window = tk.Toplevel(self._root)
             self._main_window.title('URL Recovery')
-            self._main_window.geometry('600x610')
+            self._main_window.geometry('600x650')
             self._main_window.resizable(False, False)
         
         
-            # ICO image for windows
-            if sys.platform.startswith('win'):
-                self._root.iconbitmap('.\\img\\icon.ico')
-            
-            
             # Constants variables
             self.URL = Url
             self.TYPES = Types 
