@@ -6,7 +6,7 @@ from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
 
 
-# System info
+# System info 
 import platform
 import sys
 
@@ -96,7 +96,7 @@ class DownloadClass(tk.Tk):
             
         # Update the window    
         self._update_window()
-        
+ 
         
     def _update_window(self):
         """ Private function managet to update the window 
@@ -200,7 +200,7 @@ class DownloadClass(tk.Tk):
         self._downloaded()
         self._clear_all_completed()  
         
-        
+     
     def _decorator_clear_all(function):
         """ Decorator funtion used for complement
         the functions manager of clean the window.
@@ -216,7 +216,7 @@ class DownloadClass(tk.Tk):
                 
         return wrapper
     
-       
+    
     @_decorator_clear_all
     def _clear_all_completed(self):
         """ Private function manager of clean the window with 
@@ -227,7 +227,7 @@ class DownloadClass(tk.Tk):
         self.loaded.after(8000, self.loaded.destroy)
         self.completed.after(8000, self.completed.destroy)      
         
-        
+   
     @_decorator_clear_all
     def _clear_all_uncompleted(self):
         """ Private function manager of clean the window when
@@ -252,4 +252,4 @@ class DownloadClass(tk.Tk):
             
         self.any_error = tk.Label(self._frame, text = any_error_text[0], font = self.LYRICS[1])
         self.any_error.config(fg = 'red', wraplength = 450)
-        self.any_error.grid(row = 11, columnspan = 2, sticky = 'we', pady = 10)       
+        self.any_error.grid(row = 11, columnspan = 2, sticky = 'we', pady = 10)

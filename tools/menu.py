@@ -21,11 +21,6 @@ class MenuClass(tk.Tk):
         self._root = Root
         
         
-        # ICO image for windows
-        if sys.platform.startswith('win'):
-            self._root.iconbitmap('.\\img\\icon.ico')
-            
-        
         # Constants variables
         self.URL = Url
         self.TYPES = Types 
@@ -107,8 +102,13 @@ class HelpClass(tk.Tk):
         # Assignament variables
         self._root = Root
         self.LYRICS = Lyrics
-    
-    
+
+        
+        # ICO image for windows
+        if sys.platform.startswith('win'):
+            self._root.iconbitmap('.\\img\\icon.ico')
+            
+            
         # Window
         self._main_window = tk.Toplevel(self._root)
         self._main_window.title('Manual')

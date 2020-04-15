@@ -7,6 +7,10 @@ from setuptools import setup, find_packages
 from os import path
 
 
+# Requires
+install_requires_file = open('./setup/requirements.txt', 'r+').read().splitlines()
+
+
 # Adsolute path
 here = path.abspath(path.dirname(__file__))
 
@@ -25,11 +29,7 @@ setup(
     url = 'https://sergiovanberkel.com/',
     author = 'Sergio van Berkel Acosta',
     author_mail = 'sergio.vanberkel@gmail.com',
-    packages = find_packages(where = '.'),
+    packages = find_packages(),
     python_requires = '>=3.5.*',
-    install_requires = [
-        'Pillow',
-        'pytube3',
-        'urllib3'
-    ]
+    install_requires = install_requires_file
 )

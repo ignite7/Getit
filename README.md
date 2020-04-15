@@ -1,3 +1,7 @@
+<p align="center"><img src="https://sergiovanberkel.com/carga_arch/2020/04/icon-1.png" width="500px"></p>
+
+![](https://img.shields.io/badge/Web%20Site-sergiovanberkel.com-informational) ![](https://img.shields.io/badge/Version-v1.0-success) ![](https://img.shields.io/badge/Python-%3E%3D3.5.*-important)
+
 # Getit 💎
 
 It's an application only for PC that allows to you download whatever you want from internet without any ads and of course it's free, this will be your life more easy than already its, I hope your enjoy the application as much as me when I started to developed and please help me to improve this application if you have a good idea.
