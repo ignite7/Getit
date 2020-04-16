@@ -9,12 +9,18 @@ from PIL import Image, ImageTk
 # System info 
 import platform
 import sys
+import os
+import shutil
 
 
 # Important libraries
 import pytube # Youtube
-import urllib.request # Url download
+import requests
 import time # Take the time
+
+
+# Modules
+from .decorate import DecorateClass as Decorate
 
 
 class DownloadClass(tk.Tk):
@@ -36,27 +42,42 @@ class DownloadClass(tk.Tk):
         self.PATH_DIR = Path
         self.LYRICS = Lyrics
         
+        if sys.platform.startswith('linux'):
+            self.DIR = f'{self.PATH_DIR}/download_getit/' 
         
+        else:
+            self.DIR = f'{self.PATH_DIR}\\download_getit\\'
+            
+        self.MKDIR = os.makedirs(self.DIR, exist_ok=True) # Make a new directory
+        
+          
+        # Downloads options
         try:
             # URL download 
-            if self.TYPES.get() == 'URL':
+            if self.TYPES.get() == 'Anything!':
                 self._url_downloads() # Call private function
             
             
             # YouTube download
             elif self.TYPES.get() == 'Youtube':
-                # Starts the progress bar and update the window
+                # Starts the progress bar, assignament variable and update the window
                 self._progress_bar()
                 self._root.update()
+                rename = self.RENAME.get()
                 
                 
-                # Starts youtube download and save it 
-                try:
-                    yt_video = pytube.YouTube(self.URL.get())                
-                    yt_video.streams.first().download(self.PATH_DIR)
+                # Starts youtube download and save it
+                yt_video = pytube.YouTube(self.URL.get())                
+                route = yt_video.streams.filter(res='720p').first().download(self.DIR)
                 
-                except DeprecationWarning:
-                    pass # Do nothing with warning
+                if rename == '':
+                    shutil.move(route, route)
+                
+                elif not rename.endswith('.mp4'):
+                    shutil.move(route, f'{self.DIR}{rename}.mp4')
+                    
+                else:
+                    shutil.move(route, f'{self.DIR}{rename}')
                 
                 
                 # Show the path, clear all and thanks
@@ -72,27 +93,20 @@ class DownloadClass(tk.Tk):
             
             
                 # Starts YT Playlist download and save it
-                try:
-                    yt_playlist = pytube.Playlist(self.URL.get())
-                    yt_playlist.download_all(self.PATH_DIR)
-            
-                except DeprecationWarning:
-                    pass # Do nothing with warning
+                yt_playlist = pytube.Playlist(self.URL.get())
+                yt_playlist.download_all(self.DIR, resolution='720p')
             
             
                 # Show the path, clear all and thanks
                 self._downloaded()
                 self._clear_all_completed()
-         
-                             
-            # Torrent download
-            elif self.TYPES.get() == 'Torrent':
-                self._url_downloads() # Call private function
+        
         
         except:
             self._any_error() # Call exclusive private function 
             self._clear_all_uncompleted() # Clear everything
-            
+            os.rmdir(self.DIR)
+          
             
         # Update the window    
         self._update_window()
@@ -131,7 +145,7 @@ class DownloadClass(tk.Tk):
             
         self.wait = tk.Label(self._frame, text = 'Downloading...', font = self.LYRICS[1], fg = 'red')
         self.wait.grid(row = 10, columnspan = 2, sticky = 'we')
-            
+        
         self._updating_progress_bar() # Update of the progress bar
         
        
@@ -140,7 +154,7 @@ class DownloadClass(tk.Tk):
         downloaded files.
         """
             
-        thank_you = f'The download has finished, you can find it in: \n\n{self.PATH_DIR} \n\nHave a nice day!' # Thanks
+        thank_you = f'The download has finished, you can find it in: \n\n{self.DIR} \n\nHave a nice day!' # Thanks
             
         self.loaded = tk.Label(self._frame, text = thank_you, font = self.LYRICS[1], fg = 'red', wraplength = 500)
         self.loaded.grid(row = 11, columnspan = 2, sticky = 'we', pady = 10)
@@ -168,56 +182,32 @@ class DownloadClass(tk.Tk):
         # Re-assignament variables and starts progress bar
         self._progress_bar()
         rename = self.RENAME.get()
-        url = self.URL.get()
+        url_get = self.URL.get()
 
                 
         # Request and content of the file
-        response = urllib.request.urlopen(url)
-        content = response.read()
-                
-                
+        response = requests.get(url_get, allow_redirects=True)
+
+
         # Save the file and check the url type
-        if rename != '':
-            if sys.platform.startswith('linux'):
-                with open(f'{self.PATH_DIR}/{rename}', 'wb') as downloaded:
-                    downloaded.write(content)
-
-            else:
-                with open(f'{self.PATH_DIR}\\{rename}', 'wb') as downloaded:
-                    downloaded.write(content)
-                    
+        if rename != '':    
+            with open(f'{self.DIR}{rename}', 'wb') as downloaded:
+                downloaded.write(response.content)
+          
         else:
-            if sys.platform.startswith('linux'):
-                with open(f'{self.PATH_DIR}/download_getit', 'wb') as downloaded:
-                    downloaded.write(content)
-
-            else:
-                with open(f'{self.PATH_DIR}\\download_getit', 'wb') as downloaded:
-                    downloaded.write(content)
-                    
-
+            with open(f'{self.DIR}my_download', 'wb') as downloaded:
+                downloaded.write(response.content)
+        
+        with open(f'{self.DIR}history.txt', 'w') as history_url:
+            history_url.write(f'Status Code: {response.status_code} | URL: {response.url}')
+        
+                            
         # Show the resume
         self._downloaded()
         self._clear_all_completed()  
         
      
-    def _decorator_clear_all(function):
-        """ Decorator funtion used for complement
-        the functions manager of clean the window.
-        """
-            
-        def wrapper(self):
-            self.URL.set('')
-            self.TYPES.set('Types')
-            self.RENAME.set('')
-            self.PATH_DIR = None
-                
-            function(self)
-                
-        return wrapper
-    
-    
-    @_decorator_clear_all
+    @Decorate._decorator_clear_all
     def _clear_all_completed(self):
         """ Private function manager of clean the window with 
         the default values.
@@ -228,7 +218,7 @@ class DownloadClass(tk.Tk):
         self.completed.after(8000, self.completed.destroy)      
         
    
-    @_decorator_clear_all
+    @Decorate._decorator_clear_all
     def _clear_all_uncompleted(self):
         """ Private function manager of clean the window when
         the download has failed.

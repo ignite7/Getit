@@ -11,9 +11,12 @@ import platform
 import sys
 import os
 
-
 # Sqlite3 library
 import sqlite3
+
+
+# Modules
+from .decorate import DecorateClass as Decorate
 
 
 class RecoveryClass(tk.Tk):
@@ -101,32 +104,15 @@ class RecoveryClass(tk.Tk):
         self.recovery_label = tk.Label(self._frame, image = self.recovery)
         self.recovery_label.image = self.recovery # Reference
         self.recovery_label.grid(row = 0, columnspan = 4, column = 0, sticky = 'nswe', pady = 10)
-
+   
         
-    def _connection_db(function):
-        """ Decorate function manager to implement
-        the connection with the data base.
-        """
-            
-        def wrapper(self):
-            self.connect_db = sqlite3.connect('./data_base/url_recovery.sqlite3')
-            self.cursor_db = self.connect_db.cursor()
-                
-            function(self)
-                
-            self.connect_db.commit()
-            self.connect_db.close()
-                
-        return wrapper
-        
-        
-    @_connection_db
+    @Decorate._connection_db
     def _fetch_db(self):
         """ Private function manager of show the
         dates of the data base in screen.
         """
             
-        self.cursor_db.execute('SELECT id, url, type, rename FROM backups')
+        self.cursor_db.execute('SELECT id, url, type, rename, path FROM backups')
         self.print_db = self.cursor_db.fetchall()
                 
                 
@@ -151,8 +137,8 @@ class RecoveryClass(tk.Tk):
                 
                    
         # Show the dates inside of listbox
-        space = ' ' * 12
-        self.fetch.insert(tk.END, f'[ID]{space}[URL]{space}[TYPE]{space}[RENAME]') # Titles 
+        space = ' ' * 7
+        self.fetch.insert(tk.END, f'[ID]{space}[URL]{space}[TYPE]{space}[RENAME]{space}[PATH]') # Titles 
                 
         dates = [date[:] for date in self.print_db]
         for idx, items in enumerate(dates):
@@ -181,13 +167,13 @@ class RecoveryClass(tk.Tk):
         delete_uid.grid(row = 4, column = 3, sticky = 'w', padx = 5, pady = 20)
 
             
-    @_connection_db    
+    @Decorate._connection_db  
     def _get_uid(self):
         """ Private function manager to put the 
         data again in the fields.
         """
                 
-        self.cursor_db.execute(f'SELECT url, type, rename FROM backups WHERE id = {str(self.UID.get())}')
+        self.cursor_db.execute(f'SELECT url, type, rename, path FROM backups WHERE id = {str(self.UID.get())}')
         self.print_db = self.cursor_db.fetchall()
                 
         get_message = tk.Label(self._frame, text = f'ID: {str(self.UID.get())} has been copied!')
@@ -200,12 +186,13 @@ class RecoveryClass(tk.Tk):
             self.URL.set(dates[0])
             self.TYPES.set(dates[1])
             self.RENAME.set(dates[2])
+            self.PATH_DIR = f'{dates[3]}'
 
         get_message.after(1000, get_message.destroy) # Destroy after 1 seconds
         self.UID.set('1') # Clean
             
             
-    @_connection_db
+    @Decorate._connection_db
     def _delete_uid(self):
         """ Private funtion manager to delete
         the dates from the data base.

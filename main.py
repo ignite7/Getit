@@ -97,7 +97,7 @@ class MainClass(tk.Tk):
         self.sort_label.grid(row = 3, column = 0, sticky = 'e', padx = 5)
         
         self.TYPES.set('Types')
-        list_of_types = ['URL', 'Youtube', 'YT Playlist', 'Torrent'] # List of types
+        list_of_types = ['Anything!', 'Youtube', 'YT Playlist'] # List of types
         
         self.sort = tk.OptionMenu(self._frame, self.TYPES, *list_of_types)
         self.sort.config(font = self.LYRICS[1], relief = 'groove', borderwidth = 2)
@@ -153,7 +153,7 @@ class MainClass(tk.Tk):
 
 
             # Check the type
-            if self.TYPES.get() == 'URL' or self.TYPES.get() == 'Torrent':
+            if self.TYPES.get() == 'Anything!' or self.TYPES.get() == 'Youtube':
                 self._rename()
                 
                 
@@ -167,15 +167,15 @@ class MainClass(tk.Tk):
         
         
             # Start button
-            self.start = tk.Button(self._frame, text = 'Start!', cursor = 'hand2', command = lambda:self._download())
+            self.start = tk.Button(self._frame, text = 'Start Download!', cursor = 'hand2', command = lambda:self._download())
             self.start.config(relief = 'groove', borderwidth = 2, font = self.LYRICS[1])
-            self.start.grid(row = 7, columnspan = 2, sticky = 'we', pady = 10)
+            self.start.grid(row = 7, column = 0, sticky = 'we', pady = 10)
         
         
             # Button that allow update the type 
             self.go_back = tk.Button(self._frame, text = 'Update The Type', command = lambda:self._update_type())
             self.go_back.config(cursor = 'hand2', relief = 'groove', borderwidth = 2, font = self.LYRICS[1], fg = 'red')
-            self.go_back.grid(row = 8, columnspan = 2, sticky = 'we', pady = 10)
+            self.go_back.grid(row = 7, column = 1, sticky = 'we', pady = 10)
         
         
             # Update and grid of the window
@@ -220,10 +220,10 @@ class MainClass(tk.Tk):
         update the window with the new type chosen.
         """
                     
-        if self.TYPES.get() == 'URL' or self.TYPES.get() == 'Torrent':
+        if self.TYPES.get() == 'Anything!' or self.TYPES.get() == 'Youtube':
             self._rename() # Call private function 'rename'
                         
-        elif self.TYPES.get() == 'Youtube' or self.TYPES.get() == 'YT Playlist':
+        elif self.TYPES.get() == 'YT Playlist':
             self.rename_label.destroy()
             self.rename.destroy()
         
