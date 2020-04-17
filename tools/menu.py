@@ -11,10 +11,14 @@ import platform
 import sys
 
 
+# Modules
+from .wrappers.decorate import DecorateClass as Decorate
+
+
 class MenuClass(tk.Tk):
     """ Class menu manager """
     
-    def __init__(self, Root, Url, Types, Rename, Path, Lyrics, Recovery):
+    def __init__(self, Root, Url, Types, Rename, Path, Lyrics, Recovery, Mkdir, History):
         """ Main initial method of menu """
         
         # Assignament variables
@@ -28,6 +32,8 @@ class MenuClass(tk.Tk):
         self.PATH_DIR = Path
         self.LYRICS = Lyrics
         self.RECOVERY = Recovery
+        self.MKDIR = Mkdir
+        self.HISTORY = History
         
         
         # Assignament menu
@@ -52,6 +58,7 @@ class MenuClass(tk.Tk):
         menu.add_cascade(label = 'Options', menu = menu_options)
         
         menu_options.add_command(label = 'URL Recovery', command = self.RECOVERY)
+        menu_options.add_command(label = 'Clear Fields', command= lambda: self._clear_everything())
     
     
     def _version(self):  
@@ -91,8 +98,21 @@ class MenuClass(tk.Tk):
         
         if leave == 'yes':
             self._root.destroy()
-                
+    
+    
+    @Decorate._decorator_clear_all      
+    def _clear_everything(self):
+        """ Private method manager to clear
+        everything in the fields.
+        """
+    
+        everything_clear = messagebox.showinfo(
+            parent = self._root,
+            title = 'Cleaned',
+            message = 'Everything has been cleaned!'
+        )
                        
+                           
 class HelpClass(tk.Tk):
     """ Class help manager """
     

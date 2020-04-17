@@ -20,13 +20,13 @@ import time # Take the time
 
 
 # Modules
-from .decorate import DecorateClass as Decorate
+from .wrappers.decorate import DecorateClass as Decorate
 
 
 class DownloadClass(tk.Tk):
     """ Class download manager """
     
-    def __init__(self, Root, Canvas, Frame, Url, Types, Rename, Path, Lyrics):
+    def __init__(self, Root, Canvas, Frame, Url, Types, Rename, Path, Lyrics, Mkdir, History):
         """ Main initial method of download """
         
         # Assignament variables
@@ -41,18 +41,30 @@ class DownloadClass(tk.Tk):
         self.RENAME = Rename
         self.PATH_DIR = Path
         self.LYRICS = Lyrics
-        
-        if sys.platform.startswith('linux'):
-            self.DIR = f'{self.PATH_DIR}/download_getit/' 
-        
-        else:
-            self.DIR = f'{self.PATH_DIR}\\download_getit\\'
+        self.MKDIR = Mkdir
+        self.HISTORY = History
             
-        self.MKDIR = os.makedirs(self.DIR, exist_ok=True) # Make a new directory
+        if self.MKDIR.get():
+            if sys.platform.startswith('linux'):
+                os.makedirs(f'{self.PATH_DIR}/download_getit', exist_ok=True)
+                self.DIR = f'{self.PATH_DIR}/download_getit'
+                
+            else: 
+                os.makedirs(f'{self.PATH_DIR}\\download_getit', exist_ok=True)
+                self.DIR = f'{self.PATH_DIR}\\download_getit'
+                
+        else: 
+            self.DIR = self.PATH_DIR
         
-          
         # Downloads options
         try:
+            if self.HISTORY.get():
+                self._requests()
+                
+                with open(f'{self.DIR}/history.txt', 'w') as history_url:
+                    history_url.write(f'Status Code: {self.response.status_code} | URL: {self.response.url}')
+                    
+                    
             # URL download 
             if self.TYPES.get() == 'Anything!':
                 self._url_downloads() # Call private function
@@ -68,16 +80,16 @@ class DownloadClass(tk.Tk):
                 
                 # Starts youtube download and save it
                 yt_video = pytube.YouTube(self.URL.get())                
-                route = yt_video.streams.filter(res='720p').first().download(self.DIR)
+                route = yt_video.streams.filter(res = '720p').first().download(self.DIR)
                 
                 if rename == '':
                     shutil.move(route, route)
                 
                 elif not rename.endswith('.mp4'):
-                    shutil.move(route, f'{self.DIR}{rename}.mp4')
+                    shutil.move(route, f'{self.DIR}/{rename}.mp4')
                     
                 else:
-                    shutil.move(route, f'{self.DIR}{rename}')
+                    shutil.move(route, f'{self.DIR}/{rename}')
                 
                 
                 # Show the path, clear all and thanks
@@ -94,15 +106,15 @@ class DownloadClass(tk.Tk):
             
                 # Starts YT Playlist download and save it
                 yt_playlist = pytube.Playlist(self.URL.get())
-                yt_playlist.download_all(self.DIR, resolution='720p')
+                yt_playlist.download_all(self.DIR, resolution = '720p')
             
             
                 # Show the path, clear all and thanks
                 self._downloaded()
                 self._clear_all_completed()
-        
-        
-        except:
+                
+    
+        except ZeroDivisionError:
             self._any_error() # Call exclusive private function 
             self._clear_all_uncompleted() # Clear everything
             os.rmdir(self.DIR)
@@ -172,34 +184,35 @@ class DownloadClass(tk.Tk):
         self.completed.grid(row = 10, columnspan = 2, sticky = 'we')
             
         self._update_window() # Update window
-
-
+        
+    
+    def _requests(self):
+        """ Private method manager of download the url
+        of internet and allow redirects.
+        """
+        
+        self.response = requests.get(self.URL.get(), allow_redirects = True)
+ 
+        
     def _url_downloads(self):
         """ Private function manager of downloads the types
-        'URL' and 'Torrent' from the options.
+        'Anything!' from the options.
         """
         
         # Re-assignament variables and starts progress bar
         self._progress_bar()
         rename = self.RENAME.get()
-        url_get = self.URL.get()
-
-                
-        # Request and content of the file
-        response = requests.get(url_get, allow_redirects=True)
+        self._requests() # Request and content of the file
 
 
         # Save the file and check the url type
         if rename != '':    
-            with open(f'{self.DIR}{rename}', 'wb') as downloaded:
-                downloaded.write(response.content)
+            with open(f'{self.DIR}/{rename}', 'wb') as downloaded:
+                downloaded.write(self.response.content)
           
         else:
-            with open(f'{self.DIR}my_download', 'wb') as downloaded:
-                downloaded.write(response.content)
-        
-        with open(f'{self.DIR}history.txt', 'w') as history_url:
-            history_url.write(f'Status Code: {response.status_code} | URL: {response.url}')
+            with open(f'{self.DIR}/my_download', 'wb') as downloaded:
+                downloaded.write(self.response.content)
         
                             
         # Show the resume

@@ -44,6 +44,8 @@ class MainClass(tk.Tk):
         self.TYPES = tk.StringVar()
         self.RENAME = tk.StringVar()
         self.USER = getpass.getuser() # Get the user name
+        self.MKDIR = tk.BooleanVar()
+        self.HISTORY = tk.BooleanVar()
         
         if sys.platform.startswith('linux'): 
             self.PATH_DIR = f'/home/{self.USER}'
@@ -81,11 +83,11 @@ class MainClass(tk.Tk):
         
         # Introduce cell   
         self.introduce_label = tk.Label(self._frame, text = 'Get anything from URL to your computer!', font = self.LYRICS[0])
-        self.introduce_label.grid(row = 1, columnspan = 2, sticky = 'we', pady = 10)
+        self.introduce_label.grid(row = 1, columnspan = 4, sticky = 'we', pady = 10)
         
         
         # Url cell
-        self.url_label = tk.Label(self._frame, text = 'Your URL:', font = self.LYRICS[2])
+        self.url_label = tk.Label(self._frame, text = '* Your URL:', font = self.LYRICS[2])
         self.url_label.grid(row = 2, column = 0, sticky = 'e', padx = 5)
         
         self.url = tk.Entry(self._frame, textvariable = self.URL, font = self.LYRICS[1])
@@ -93,7 +95,7 @@ class MainClass(tk.Tk):
         
         
         # Choose type cell
-        self.sort_label =  tk.Label(self._frame, text = 'Choose the type:', font = self.LYRICS[1])
+        self.sort_label =  tk.Label(self._frame, text = '* Choose the type:', font = self.LYRICS[1])
         self.sort_label.grid(row = 3, column = 0, sticky = 'e', padx = 5)
         
         self.TYPES.set('Types')
@@ -105,14 +107,16 @@ class MainClass(tk.Tk):
         
         
         # Button that allow continue to the another fields
-        self.go_head = tk.Button(self._frame, text='Continue', cursor='hand2', command=lambda: self._continue())
-        self.go_head.config(relief='groove', borderwidth=2, font=self.LYRICS[1])
-        self.go_head.grid(row=4, columnspan=2, sticky='we', pady=5)
+        self.go_head = tk.Button(self._frame, text = 'Continue', cursor = 'hand2', command = lambda: self._continue())
+        self.go_head.config(relief = 'groove', borderwidth = 2, font = self.LYRICS[1])
+        self.go_head.grid(row = 4, columnspan = 4, sticky = 'we', pady = 5)
         
         
         # Modules call
-        self.recovery = lambda: Recovery(self._root, self.URL, self.TYPES, self.RENAME, self.PATH_DIR, self.LYRICS)
-        Menu(self._root, self.URL, self.TYPES, self.RENAME, self.PATH_DIR, self.LYRICS, self.recovery) 
+        self.recovery = lambda: Recovery(self._root, self.URL, self.TYPES, self.RENAME, self.PATH_DIR, self.LYRICS,
+                                         self.MKDIR, self.HISTORY)
+        Menu(self._root, self.URL, self.TYPES, self.RENAME, self.PATH_DIR, self.LYRICS, self.recovery, 
+             self.MKDIR, self.HISTORY) 
         
         
         # Update and grid of the window
@@ -137,7 +141,7 @@ class MainClass(tk.Tk):
             
         self.logo_label = tk.Label(self._frame, image = self.logo)
         self.logo_label.image = self.logo # Reference
-        self.logo_label.grid(row = 0, columnspan = 2, column = 0, sticky = 'nswe', pady = 20)
+        self.logo_label.grid(row = 0, columnspan = 4, column = 0, sticky = 'nswe', pady = 20)
 
        
     def _continue(self):
@@ -164,18 +168,26 @@ class MainClass(tk.Tk):
             self.save = tk.Button(self._frame, text = 'Open', cursor = 'hand2', command = lambda:self._open_dir())
             self.save.config(relief = 'groove', borderwidth = 2, font = self.LYRICS[1])
             self.save.grid(row = 6, column = 1, sticky = 'we', pady = 5)
-        
-        
+
+            
+            # Make dir and make url history
+            self.mkdir = tk.Checkbutton(self._frame, text = 'Save in a folder', var = self.MKDIR, font = self.LYRICS[1])
+            self.mkdir.grid(row = 7, column = 0, sticky = 'we', padx = 5, pady = 5)
+            
+            self.history = tk.Checkbutton(self._frame, text = 'Track URL', var = self.HISTORY, font = self.LYRICS[1])
+            self.history.grid(row = 7, column = 1, sticky = 'we', padx = 5, pady = 5)
+            
+            
             # Start button
             self.start = tk.Button(self._frame, text = 'Start Download!', cursor = 'hand2', command = lambda:self._download())
             self.start.config(relief = 'groove', borderwidth = 2, font = self.LYRICS[1])
-            self.start.grid(row = 7, column = 0, sticky = 'we', pady = 10)
+            self.start.grid(row = 8, column = 0, sticky = 'we', pady = 10)
         
         
             # Button that allow update the type 
             self.go_back = tk.Button(self._frame, text = 'Update The Type', command = lambda:self._update_type())
             self.go_back.config(cursor = 'hand2', relief = 'groove', borderwidth = 2, font = self.LYRICS[1], fg = 'red')
-            self.go_back.grid(row = 7, column = 1, sticky = 'we', pady = 10)
+            self.go_back.grid(row = 8, column = 1, sticky = 'we', pady = 10)
         
         
             # Update and grid of the window
@@ -221,9 +233,9 @@ class MainClass(tk.Tk):
         """
                     
         if self.TYPES.get() == 'Anything!' or self.TYPES.get() == 'Youtube':
-            self._rename() # Call private function 'rename'
+            self._rename()
                         
-        elif self.TYPES.get() == 'YT Playlist':
+        else:
             self.rename_label.destroy()
             self.rename.destroy()
         
@@ -232,9 +244,14 @@ class MainClass(tk.Tk):
         """ Private function manager of initialize the module called
         'download.py' and 'connection_db.py'.
         """
-                    
-        DataBase(self.URL, self.TYPES, self.RENAME, self.PATH_DIR) 
-        Download(self._root, self._canvas, self._frame, self.URL, self.TYPES, self.RENAME, self.PATH_DIR, self.LYRICS)
+        
+        if self.URL.get() == '' or self.TYPES.get() == 'Types':
+             self._error_01() # Call error function
+             
+        else:  
+            DataBase(self.URL, self.TYPES, self.RENAME, self.PATH_DIR, self.MKDIR, self.HISTORY) 
+            Download(self._root, self._canvas, self._frame, self.URL, self.TYPES, self.RENAME, self.PATH_DIR, 
+                     self.LYRICS, self.MKDIR, self.HISTORY)
         
         
     def _error_01(self):
@@ -242,10 +259,10 @@ class MainClass(tk.Tk):
         number 01.
         """
             
-        error_01_text = 'Please complete all the fields and select all the options!' # Text
+        error_01_text = 'Please complete all the Required fields!' # Text
                 
         self.error_01_label = tk.Label(self._frame, text = error_01_text, font = self.LYRICS[1], fg = 'red', wraplength = 400)
-        self.error_01_label.grid(row = 8, columnspan = 2, sticky = 'we', pady = 10)             
+        self.error_01_label.grid(row = 9, columnspan = 4, sticky = 'we', pady = 10)             
 
         self.error_01_label.after(5000, self.error_01_label.destroy) # Destroy error after 5 seconds
                 

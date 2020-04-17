@@ -40,6 +40,8 @@ class DecorateClass(object):
             self.TYPES.set('Types')
             self.RENAME.set('')
             self.PATH_DIR = None
+            self.MKDIR.set(False)
+            self.HISTORY.set(False)
                 
             function(self)
                 

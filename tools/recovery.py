@@ -16,13 +16,13 @@ import sqlite3
 
 
 # Modules
-from .decorate import DecorateClass as Decorate
+from .wrappers.decorate import DecorateClass as Decorate
 
 
 class RecoveryClass(tk.Tk):
     """ Class url recovery manager """
     
-    def __init__(self, Root, Url, Types, Rename, Path, Lyrics):
+    def __init__(self, Root, Url, Types, Rename, Path, Lyrics, Mkdir, History):
         """ Main initial method of url recovery """
         
         # Assignament variables
@@ -50,6 +50,8 @@ class RecoveryClass(tk.Tk):
             self.PATH_DIR = Path
             self.LYRICS = Lyrics
             self.UID = tk.IntVar() # Get id
+            self.MKDIR = Mkdir
+            self.HISTORY = History
         
         
             # Canvas, frame and scroll bar
@@ -138,7 +140,7 @@ class RecoveryClass(tk.Tk):
                    
         # Show the dates inside of listbox
         space = ' ' * 7
-        self.fetch.insert(tk.END, f'[ID]{space}[URL]{space}[TYPE]{space}[RENAME]{space}[PATH]') # Titles 
+        self.fetch.insert(tk.END, f'[ID]{space}[URL]{space}[TYPE]{space}[RENAME]{space}[PATH]')
                 
         dates = [date[:] for date in self.print_db]
         for idx, items in enumerate(dates):
@@ -173,7 +175,7 @@ class RecoveryClass(tk.Tk):
         data again in the fields.
         """
                 
-        self.cursor_db.execute(f'SELECT url, type, rename, path FROM backups WHERE id = {str(self.UID.get())}')
+        self.cursor_db.execute(f'SELECT url, type, rename, path, track, folder FROM backups WHERE id = {str(self.UID.get())}')
         self.print_db = self.cursor_db.fetchall()
                 
         get_message = tk.Label(self._frame, text = f'ID: {str(self.UID.get())} has been copied!')
@@ -187,6 +189,9 @@ class RecoveryClass(tk.Tk):
             self.TYPES.set(dates[1])
             self.RENAME.set(dates[2])
             self.PATH_DIR = f'{dates[3]}'
+            self.HISTORY.set(dates[4])
+            self.MKDIR.set(dates[5])
+            
 
         get_message.after(1000, get_message.destroy) # Destroy after 1 seconds
         self.UID.set('1') # Clean
