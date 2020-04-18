@@ -52,7 +52,7 @@ class DownloadClass(tk.Tk):
             else: 
                 os.makedirs(f'{self.PATH_DIR}\\download_getit', exist_ok=True)
                 self.DIR = f'{self.PATH_DIR}\\download_getit'
-                
+            
         else: 
             self.DIR = self.PATH_DIR
         
@@ -62,7 +62,11 @@ class DownloadClass(tk.Tk):
                 self._requests()
                 
                 with open(f'{self.DIR}/history.txt', 'w') as history_url:
-                    history_url.write(f'Status Code: {self.response.status_code} | URL: {self.response.url}')
+                    history_url.write(
+                        f'URL: {self.response.url}\n'
+                        f'STATUS CODE: {self.response.status_code}\n'
+                        f'HEADERS: {self.response.headers}'
+                    )
                     
                     
             # URL download 
@@ -114,7 +118,7 @@ class DownloadClass(tk.Tk):
                 self._clear_all_completed()
                 
     
-        except ZeroDivisionError:
+        except:
             self._any_error() # Call exclusive private function 
             self._clear_all_uncompleted() # Clear everything
             os.rmdir(self.DIR)

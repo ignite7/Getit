@@ -19,7 +19,7 @@ class ConnectionClass(object):
         self.HISTORY = History
         
         if self.RENAME.get() == '':
-            self.RENAME = 'download_getit'
+            self.RENAME = 'my_download'
             self.DATES = (self.URL.get(), self.HISTORY.get(), self.TYPES.get(), self.RENAME, self.PATH_DIR, 
                           self.MKDIR.get())
         
