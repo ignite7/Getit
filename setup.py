@@ -4,7 +4,7 @@ install all the requirements of the program.
 
 # Libraries imported
 from setuptools import setup, find_packages
-from os import path
+from os import path, system
 
 
 # Requires
@@ -31,5 +31,5 @@ setup(
     author_mail = 'sergio.vanberkel@gmail.com',
     packages = find_packages(),
     python_requires = '>=3.5.*',
-    install_requires = install_requires_file
+    install_requires = install_requires_file or system('pip install -r ./setup/requirements.txt')
 )

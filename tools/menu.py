@@ -125,7 +125,7 @@ class HelpClass(tk.Tk):
 
         
         # ICO image for windows
-        if sys.platform.startswith('win'):
+        if sys.platform.startswith('win32'):
             self._root.iconbitmap('.\\img\\icon.ico')
             
             
@@ -136,15 +136,9 @@ class HelpClass(tk.Tk):
         self._main_window.resizable(False, False)
         
         
-        # Canvas, frame and scroll bar
-        scroll = tk.Scrollbar(self._main_window)
-        self._canvas = tk.Canvas(self._main_window, yscrollcommand = scroll.set)
-        
-        scroll.config(command = self._canvas.yview)
-        scroll.pack(side = 'right', fill = 'y')
-        
+        # Canvas and frame 
+        self._canvas = tk.Canvas(self._main_window)
         self._frame = tk.Frame(self._canvas)
-        self._canvas.create_window(0, 0, window = self._frame, anchor = 'nw')
         
         
         # Image
@@ -203,7 +197,6 @@ class HelpClass(tk.Tk):
         """
             
         self._main_window.update()
-        self._canvas.config(scrollregion = self._canvas.bbox('all'))
         self._canvas.pack()
         self._frame.pack()
         
