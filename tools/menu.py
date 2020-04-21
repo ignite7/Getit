@@ -73,7 +73,7 @@ class MenuClass(tk.Tk):
         version = messagebox.showinfo(
             parent = self._root,
             title = 'Version',
-            message = 'Program Version: 1.0 \n\nLenguage Version: Python-3.8.X'
+            message = 'Program Version: 2.0 \n\nLenguage Version: Python-3.8.X'
         )
 
 

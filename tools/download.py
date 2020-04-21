@@ -14,9 +14,9 @@ import shutil
 
 
 # Important libraries
-import pytube # Youtube
+import pytube 
 import requests
-import time # Take the time
+import time 
 
 
 # Modules

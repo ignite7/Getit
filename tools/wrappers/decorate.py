@@ -1,11 +1,5 @@
 """ All libraries and modules imported """
 
-# Tkinter 
-import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
-from PIL import Image, ImageTk
-
-
 # Sqlite3 library
 import sqlite3
 

@@ -1,6 +1,6 @@
 <p align="center"><img src="https://sergiovanberkel.com/carga_arch/2020/04/icon-1.png" width="400px"></p>
 
-![](https://img.shields.io/badge/Web%20Site-sergiovanberkel.com-informational) ![](https://img.shields.io/badge/Version-v1.0-success)
+![](https://img.shields.io/badge/Web%20Site-sergiovanberkel.com-informational) ![](https://img.shields.io/badge/Version-v2.0-success)
 
 # Getit 💎
 
@@ -52,7 +52,7 @@ dir Getit-master
 python setup.py install
 ```
 
-Or executing the `Getit.exe` from the `Getit-master/win32/Getit.exe`
+Or executing the `Getit.exe` from the `Getit-master/win32/Getit-EXE/Getit.exe`
 
 # Rules 📖
 
@@ -68,9 +68,11 @@ Or executing the `Getit.exe` from the `Getit-master/win32/Getit.exe`
 
 6. You can copy and remove your old downloads in the options of the menu 'URL RECOVERY'.
 
-7. If you want more information you can contact me in [Sergio van Berkel Acosta](https://sergiovanberkel.com).
+7. You can clear all fields with the button 'CLEAR FIELDS'.
 
-8. And finally thank you for uses this program!
+8. If you want more information you can contact me in [Sergio van Berkel Acosta](https://sergiovanberkel.com).
+
+9. And finally thank you for uses this program!
 
 # Thanks 👏🏻
 
