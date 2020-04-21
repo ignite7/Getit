@@ -1,5 +1,11 @@
 """ All libraries and modules imported """
 
+# Tkinter 
+import tkinter as tk
+from tkinter import ttk, filedialog, messagebox
+from PIL import Image, ImageTk
+
+
 # Sqlite3 library
 import sqlite3
 
@@ -25,6 +31,25 @@ class DecorateClass(object):
             self.connect_db.commit()
             self.connect_db.close()
                 
+        return wrapper
+    
+    
+    @staticmethod
+    def _instructions_db(function):
+        """ Decorete function manager to implement
+        the connection with the instructions.
+        MODULE: tools.menu
+        """
+        
+        def wrapper(self):
+            self.connect_db = sqlite3.connect('./data_base/instructions.sqlite3')
+            self.cursor_db = self.connect_db.cursor()
+                
+            function(self)
+            
+            self.connect_db.commit()
+            self.connect_db.close()
+            
         return wrapper
     
     

@@ -137,7 +137,7 @@ class RecoveryClass(tk.Tk):
                 
         dates = [date[:] for date in self.print_db]
         for idx, items in enumerate(dates):
-            self.fetch.insert(idx + 1, items)
+            self.fetch.insert(idx + 1, f'{items}')
                 
                 
         # Uid field    

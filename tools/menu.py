@@ -11,6 +11,10 @@ import platform
 import sys
 
 
+# Sqlite3 library
+import sqlite3
+
+
 # Modules
 from .wrappers.decorate import DecorateClass as Decorate
 
@@ -149,47 +153,46 @@ class HelpClass(tk.Tk):
         else:
             self.manual = ImageTk.PhotoImage(Image.open('.\\img\\manual.png'))
             self._logo_complement()
-            
-            
+        
+        
         # Texts
-        TEXTS = [
+        TEXT = [
             (
                 'The purpose of this program is makes your life more easy, '
                 'but please read the instructions to you don\'t make mistakes.'
-             ),
-            (
-                '01 - You make sure that the \'URL\' is the correct and the file to download has permissions.'
-                '\n\n'
-                '02 - The only fields that aren\'t necessary fill out are \'RENAME\' field and \'OPEN FOLDER\' field.'
-                '\n\n'
-                '03 - If you rename your file please puts the correct extension of the file.'
-                '\n\n'
-                '04 - You can update your choise selecting a new type and the click in the button \'UPDATE THE TYPE\'.'
-                '\n\n'
-                '05 - REMEMBER to be patient with the download because depends of your internet conection '
-                'and REMEMBER sometimes there are URL\'s that have firewalls or locks, '
-                'consult the provider of the URL if you have problems.'
-                '\n\n'
-                '06 - You can copy and remove your old downloads in the options of the menu \'URL RECOVERY\'.'
-                '\n\n'
-                '07 - If you want more information you can contact me in www.sergiovanberkel.com.'
-                '\n\n'
-                '08 - And finally thank you for uses this program!'
-            )
+             )
         ]
         
         
         # Instructions
-        instructions = tk.Label(self._frame, text = TEXTS[0], font = self.LYRICS[0], justify = 'center', wraplength = 500)
+        instructions = tk.Label(self._frame, text = TEXT[0], font = self.LYRICS[0], justify = 'center', wraplength = 500)
         instructions.grid(row = 1, column = 0, sticky = 'we', pady = 20)
         
-        rules = tk.Label(self._frame, text = TEXTS[1], font = self.LYRICS[1], justify = 'left', wraplength = 500)
-        rules.grid(row = 2, column = 0, sticky = 'we', pady = 10)
-
+        
+        # Listbox and scrollbars
+        v_scrollbar = tk.Scrollbar(self._frame, orient = 'vertical')
+        v_scrollbar.grid(row = 2, column = 4, sticky = 'ns')
+        h_scrollbar = tk.Scrollbar(self._frame, orient = 'horizontal')
+        h_scrollbar.grid(row = 3, columnspan = 4, sticky = 'we')
+        
+        self.rule = tk.Listbox(self._frame, width = 60, height = 20, cursor = 'hand2', font = self.LYRICS[1])
+        self.rule.config(xscrollcommand = h_scrollbar.set, yscrollcommand = v_scrollbar.set)
+        self.rule.config(selectmode = tk.SINGLE, borderwidth = 2)
+        self.rule.grid(row = 2, columnspan = 1, sticky = 'we')
+        
+        v_scrollbar.config(command = self.rule.yview)
+        h_scrollbar.config(command = self.rule.xview)
+        
+        
+        # Show the dates inside of listbox
+        space = ' ' * 20
+        self.rule.insert(tk.END, f'[Nº]{space}[RULE DESCRIPTION]')
+        self._show_rules()
+        
 
         # Update window    
         self._update_window()   
-        
+    
         
     def _update_window(self):
         """ Private function managet to update the window 
@@ -209,3 +212,25 @@ class HelpClass(tk.Tk):
         self.manual_label = tk.Label(self._frame, image = self.manual)
         self.manual_label.image = self.manual # Reference
         self.manual_label.grid(row = 0, columnspan = 1, column = 0, sticky = 'nswe', pady = 20)
+        
+    
+    @Decorate._instructions_db
+    def _show_rules(self):
+        """ Private method manager to show
+        the instructions in the textlist.
+        """
+        
+        try:
+            self.cursor_db.execute('SELECT id, rule_description FROM instructions')
+            self.print_db = self.cursor_db.fetchall()
+        
+            dates = [date[:] for date in self.print_db]
+            for idx, items in enumerate(dates):
+                self.rule.insert(idx + 1, f'{items}')
+                
+        except (sqlite3.OperationalError, sqlite3.InterfaceError):
+            error_db = messagebox.showerror(
+                parent = self._main_window,
+                title = 'Data Base Don\'t Found',
+                message = 'The data base doesn\'t exist, read the instuctions in:\n sergiovanberkel.com.'
+            )
