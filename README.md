@@ -1,7 +1,3 @@
-<p align="center"><img src="https://sergiovanberkel.com/carga_arch/2020/04/icon-1.png" width="400px"></p>
-
-![](https://img.shields.io/badge/Web%20Site-sergiovanberkel.com-informational) ![](https://img.shields.io/badge/Version-v2.0-success)
-
 # Getit 💎
 
 It's an application only for PC that allows to you download whatever you want from internet without any ads and of course it's free, this will be your life more easy than already its, I hope your enjoy the application as much as me when I started to developed and please help me to improve this application if you have a good idea.
@@ -76,4 +72,4 @@ Or executing the `Getit.exe` from the `Getit-master/win32/Getit-EXE/Getit.exe`
 
 # Thanks 👏🏻
 
-***Made by:*** [Sergio van Berkel Acosta](https://sergiovanberkel.com) <img src="https://sergiovanberkel.com/carga_arch/2020/01/Copia-de-Copia-de-Black-and-Green-Icon-Computer-Logo.png" width="40px"></p>
+***Made by:*** [Sergio van Berkel Acosta](https://www.sergiovanberkel.com) 
