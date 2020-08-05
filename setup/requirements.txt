@@ -1,5 +1,5 @@
 # Python version >= 3.5.*
 # Indispensable libraries
-Pillow==7.0.0 
+Pillow>=7.1.0
 pytube3==9.6.4
 urllib3==1.25.8
